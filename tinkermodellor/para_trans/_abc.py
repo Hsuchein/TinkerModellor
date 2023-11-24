@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any
 
-class Base(metaclass=ABCMeta):
+class FroceFieldTrans(metaclass=ABCMeta):
     
     @abstractmethod
     def __init__(self):
@@ -13,4 +13,3 @@ class Base(metaclass=ABCMeta):
         
     def _transform_to_tinker(self, atom_type : str, trans_dict : dict) -> str:
         return trans_dict.items(atom_type)
-
