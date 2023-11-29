@@ -2,7 +2,7 @@ from ._water_ions_trans import WaterAndIonsForceField
 from tinkermodellor.para_trans._abc import FroceFieldTrans
 from ._gaff import GAFFForceField
 
-class Amber14SBGAFFTrans(FroceFieldTrans):
+class AmberGAFFTrans(FroceFieldTrans):
     waterpara = WaterAndIonsForceField.water_para
     ionpara = WaterAndIonsForceField.ion_para
 

@@ -11,7 +11,7 @@ class WaterAndIonsForceField:
     }
 
     ion_para = {
-    'CA':99,              
+    'C0':99,              
     'Cl':104,
     'Na':93, 
     'MG':98, 
