@@ -1,11 +1,16 @@
 import pandas
+import sys
+import os
+
 class Top():
 
-    def __init__(self,file_name:str,ifdef):
+    def __init__(self,file_path:str,ifdef):
         self.ifdef = ifdef
         self.include = set()
-        self.read_top_file(file_name)
+        self.read_top_file(file_path)
         self.sort_readed()
+        print(f'file in {self.include} are included')
+        self.process_include()
         pass
 
     def read_top_file(self,file_name:str,return_split=False):
@@ -77,7 +82,13 @@ class Top():
         
         del self.part
 
+    def process_include(self,prepared_itp_path='./amber14sb_parmbsc1.ff'):
+        prepared_itp_files=os.listdir(prepared_itp_path)+os.listdir('./')
+        for i in self.include:
+            if i in prepared_itp_files:print('processing',i)
+            else:raise Exception('file',i,'not found')
+
+
+
                     
     
-
-test = Top('topol.top','NORMAL')
