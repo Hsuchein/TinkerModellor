@@ -53,12 +53,16 @@ class TinkerModellorAtom():
         if isinstance(forcefield, str):
             if forcefield == 'AmberGAFFtoAMOEBABIO18':
                 self.forcefield = forcefield
-                AmberGAFFtoAMOEBABIO18Trans = AmberFF(Aggressive)
+                self.AmberGAFFtoAMOEBABIO18Trans = AmberFF(Aggressive)
             else:
                 raise ValueError('For now, noly AmberGAFFtoAMOEBABIO18 is implemented')
         else :
             raise TypeError('forcefield must be str')
         
+        if isinstance(TinkerAtomType, (str, int)):
+            self.TinkerAtomType = TinkerAtomType
+        else :
+            raise TypeError('TinkerAtomType must be str or int')
         
         def __call__(self):
-            raise TypeError('atomtype must be str')
+            return self.AmberGAFFtoAMOEBABIO18Trans(self.atomtype)
