@@ -1,11 +1,9 @@
 from ._water_ions_trans import WaterAndIonsForceField
 from tinkermodellor.para_trans._abc import FroceFieldTrans
 from ._gaff import GAFFForceField
+from ._amberFF import AmberFF
 
 class AmberGAFFTrans(FroceFieldTrans):
-    waterpara = WaterAndIonsForceField.water_para
-    ionpara = WaterAndIonsForceField.ion_para
-
     
     def __init__(self,Aggressive:bool = False):
         """Force Field Transformation Dictionary Initialization
@@ -20,10 +18,10 @@ class AmberGAFFTrans(FroceFieldTrans):
         
         super().__init__()
         
-        self.FFpara = WaterAndIonsForceField.water_para + WaterAndIonsForceField.ion_para + GAFFForceField.gaff_para
+        self.FFpara = WaterAndIonsForceField.water_para + WaterAndIonsForceField.ion_para + GAFFForceField.gaff_para +AmberFF.amberff_para
         
         if Aggressive:
-            self.FFpara += GAFFForceField.unpair_gaff_para
+            self.FFpara += GAFFForceField.unpair_gaff_para + AmberFF.unpair_amberff_para
         
 
     def __call__(self, atom_type: str) -> str:
