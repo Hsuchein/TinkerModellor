@@ -1,5 +1,5 @@
 from ._water_ions_trans import WaterAndIonsForceField
-from tinkermodellor.para_trans._abc import FroceFieldTrans
+from para_trans._abc import FroceFieldTrans
 from ._gaff import GAFFForceField
 from ._amberFF import AmberFF
 

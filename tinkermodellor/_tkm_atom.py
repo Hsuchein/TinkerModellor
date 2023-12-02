@@ -1,5 +1,5 @@
 from typing import Union
-from .para_trans.amoebabio18._forcefieldtrans import AmberGAFFTrans 
+from para_trans.amoebabio18._forcefieldtrans import AmberGAFFTrans 
 
 class TinkerModellorAtom():
 
