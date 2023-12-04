@@ -1,8 +1,11 @@
+from ._tkm_atom import *
+
 class TinkerModellorMolecule() :
 
     def __init__(self) -> None :
         self.molecule_name = 'mismatch_or_raw'
         self.atoms_nums = 0
+        self.index = 0
         pass
 
     def Construct_Molecule(self,Top_moleculetype_info:list) :
@@ -54,6 +57,24 @@ class TinkerModellorMolecule() :
 
             self.bonds[atom_A].append(atom_B)
             self.bonds[atom_B].append(atom_A)
+
+    def __iter__(self) :
+        return self
+    
+    def __next__(self) :
+        if self.index == self.atoms_nums :
+            self.index = 0
+            raise StopIteration
+        else :
+            self.index += 1
+            return [self.atoms[self.index],self.bonds[self.index]]
+
+    def __getitem__(self,key:int) :
+        return TinkerModellorAtom(self.atoms[key])
+
+    def __len__(self) :
+        return self.atoms_nums
+
 
     def __str__(self) -> str:
         return 'molecule_name:{},atoms_num:{}'.format(self.molecule_name,self.atoms_nums)
