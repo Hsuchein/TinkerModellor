@@ -55,7 +55,7 @@ class TinkerModellorAtom():
 
         if isinstance(forcefield, str):
             if forcefield == 'AmberGAFFtoAMOEBABIO18':
-                self.AmberGAFFtoAMOEBABIO18Trans = AmberGAFFTrans(Aggressive)
+                self.TransFunc = AmberGAFFTrans(Aggressive)
             else:
                 raise ValueError('For now, noly AmberGAFFtoAMOEBABIO18 is implemented')
         else :
@@ -69,4 +69,4 @@ class TinkerModellorAtom():
 
 
         def __call__(self):
-            self.TinkerAtomType = self.AmberGAFFtoAMOEBABIO18Trans(self.atomtype)
+            self.TinkerAtomType = self.TransFunc(self.atomtype)
