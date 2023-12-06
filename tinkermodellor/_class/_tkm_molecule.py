@@ -1,6 +1,7 @@
-from ._tkm_atom import *
+from _tkm_atom import *
 
 class TinkerModellorMolecule() :
+    "This is a class for TinkerModellorMolecule , unsupported External calls"
 
     def __init__(self) -> None :
         self.molecule_name = 'mismatch_or_raw'
@@ -10,13 +11,26 @@ class TinkerModellorMolecule() :
 
     def Construct_Molecule(self,Top_moleculetype_info:list) :
         '''
+
         this is a inner_built methods,initial a TinkerModellorMolecule item from 
         a processed top_moleculetype item,which is donated as a list contain all
         lines between two '[ moleculetype ]' line,this information will be extracted:
-        ## atom information --> self.atoms[dict]:
-        {int[atom_index_in_molecule(AIIM)]:list[str[AIIM],str[atom_type],str[residue_index],str[residue],str[atom_type_in_residue]]}
-        ## bonds(topology) --> self.bonds[dict]:
-        {int[AIIM]:list[int[connected_AIIM],...]}
+
+        'molecule_name', <class 'str'>      atom_name recorded in top file
+
+        'atoms_nums', <class 'int'>         atoms number in molecule  
+
+        'index', <class 'int'>              current iter index for global usage , will return the atoms[index]  
+
+        'part_dict', <class 'dict'>         raw data readed from top file , allow {part_name:information_list}  
+
+        'atoms', <class 'dict'>             all the atoms in the molecule ,allow {atom_A:atom_index_in_molecule,atom_name,res_index,res_name,atom_type_in_res}  
+
+        'bonds', <class 'dict'>             connect between atoms , allow {atom_A:[atom_B,atom_C,atom_D]}  
+
+        Returns:
+            None
+   
         '''
         
         self.molecule_name = Top_moleculetype_info[0][0]
