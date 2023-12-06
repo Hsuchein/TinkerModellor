@@ -1,6 +1,5 @@
 class GAFFForceField:
 
-
     gaff_para = {
         'hc':6,
         'h1':6,
@@ -46,5 +45,4 @@ class GAFFForceField:
         'cv':17,
         'cx':16,
         'cy':16,
-
     }

@@ -1,5 +1,9 @@
 from typing import Union
-from .para_trans.amoebabio18._forcefieldtrans import AmberGAFFTrans 
+from para_trans.amoebabio18._forcefieldtrans import AmberGAFFTrans 
+
+#temporarily not used 2023.12.06
+#temporarily not used 2023.12.06
+#temporarily not used 2023.12.06
 
 class TinkerModellorAtom():
 
@@ -11,7 +15,7 @@ class TinkerModellorAtom():
                  topology:list = [], 
                  forcefield:str = 'AmberGAFFtoAMOEBABIO18', 
                  Aggressive:bool = False,
-                 TinkerAtomType:Union[str,int] = None,):
+                 TinkerAtomType:Union[str,int] = None):
         """TinkerModellorAtom Initialization
 
         Args:
