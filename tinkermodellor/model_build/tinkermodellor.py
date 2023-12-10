@@ -1,6 +1,5 @@
-from typing import Any
-from tinkermodellor._class._gmxmolecule import GMXMolecule
-from tinkermodellor._class._tkm_system import TinkerModellorSystem
+from ._class._gmxmolecule import GMXMolecule
+from ._class._tkm_system import TinkerModellorSystem
 import re
 
 
@@ -21,7 +20,7 @@ ATOMTYPE_PATTERN = r"(\s*[0-9]+\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?)(\*?\s*[0-9]
 #;                    ai          aj     funct         c0         c1         c2         c3
 #                     17          20     1            0.14650 272713.120000
 #                 <-- grp 1 --><grp 2 ><---------------grp 3--------------->
-BOND_PATTERN = r"(\s*[0-9]*\s*)([0-9]*)(\s*1\s*[0-9].[0-9]*\s[0-9]*.[0-9]*)"
+BOND_PATTERN = r"\s*([0-9]+)\s*([0-9]*)(\s*1\s*[0-9].[0-9]*\s[0-9]*.[0-9]*\n)"
 
 #[ molecules ]
 #;                     Compound               mols
@@ -29,7 +28,7 @@ BOND_PATTERN = r"(\s*[0-9]*\s*)([0-9]*)(\s*1\s*[0-9].[0-9]*\s[0-9]*.[0-9]*)"
 #                      Na+                    10
 #                      WAT                    9971
 #                 <-------- grp 1 ---------><grp 2 >
-MOLECULES_PATTERN = r"([A-Za-z0-9]*-?\+?\s*)([0-9]+)"
+MOLECULES_PATTERN = r"([A-Za-z0-9]*-?\+?\s*)([0-9]+\n)"
 
 class tinkermodellor:
 
@@ -48,7 +47,7 @@ class tinkermodellor:
 
         #Used for store the different molecules
         #Once read a new molecule, the it would be append to self.moleculestype.
-        self.moleculetype = []
+        self.moleculetype = [GMXMolecule()]
 
         #To control whether the has already appeared
         molecules_flag= False
@@ -56,20 +55,27 @@ class tinkermodellor:
         #To record each moleculetype's number in entire system
         self.moleculetype_num = []
 
+        #Used for counting how many moleculetypes have been read
+        molecule_type_count = 0 
+
         for line in lines:
             #A new molecule start (according to the GMX top file format)
             #GMX topology file format description: https://manual.gromacs.org/current/reference-manual/topologies/topology-file-formats.html
 
-            molecule_type_count = 0 
+            
             if '[ moleculetype ]' in line:
+                print("Detect a new moleculetype")
                 
                 #To add items into moleculetype(GMXMolecule)
                 if molecule_type_count > 0:
+                    #print(atomtype_read)
+                    #print(molecule_type_count)
+                    #print(bond_read)
                     self.moleculetype[molecule_type_count](f'TKM{molecule_type_count}',atomtype_read,bond_read)
-
+      
                 #Build a new GMXMolecule class to store a new moleculetype
                 molecule_type_count += 1
-                self.moleculetype.append(GMXMolecule())
+                self.moleculetype.append(GMXMolecule())    
                 atomtype_read = []
                 bond_read = []
                 continue
@@ -84,7 +90,8 @@ class tinkermodellor:
                 #To match the BOND_PATTERN
                 match_bond = re.fullmatch(BOND_PATTERN,line)
                 if match_bond:
-                    bond_read.append(list(match_bond.group(1),match_bond.group(2)))
+                    print(line)
+                    bond_read.append([int(match_bond.group(1)),int(match_bond.group(2))])
             
             
             if '[ molecules ]' in line:
@@ -92,8 +99,9 @@ class tinkermodellor:
                 molecules_flag =True
 
             if molecules_flag and re.fullmatch(MOLECULES_PATTERN,line):
-                self.moleculetype_num.append(line.strip()[-1])
-                
+
+                self.moleculetype_num.append(line.strip().split(' ')[-1])
+                #DEBUG##print(f"Detect a new molecule, and it has {self.moleculetype_num[-1]} molecules")
                 
         
 
@@ -113,17 +121,21 @@ class tinkermodellor:
     def build_tkmsystem(self,gro_path:str, top_path:str):
 
         self.read_top_file(top_path)
-        assert len(self.moleculetype) == len(self.moleculetype_num), 'Number of Moleculetypes in [ molecules ] Must Be Equal To Number of [ moleculetype ]'
+        assert len(self.moleculetype)-1 == len(self.moleculetype_num), f'Number of Moleculetypes({len(self.moleculetype)}) in [ molecules ] Must Be Equal To Number({len(self.moleculetype_num)}) of [ moleculetype ]'
 
         self.read_gro_file(gro_path)
 
         system = TinkerModellorSystem()
         #According to self.moleculetype to rebuild the Tinker XYZ format file
-        for count in len(self.moleculetype_num):
-            for i in int(self.moleculetype_num):
-                system(self.coordinates,self.moleculetype[count],[system.AtomNums+1,system.AtomNums+self.moleculetype[count].AtomNums])
+        count = 1
+        while count <= len(self.moleculetype_num):
+            for i in range(int(self.moleculetype_num[count])):
+                print(self.moleculetype[count].AtomTypes)
+                system(atomcrds=self.coordinates,molecule_class=self.moleculetype[count],atom_index=[system.AtomNums+1,system.AtomNums+self.moleculetype[count].AtomNums])
+            count +=1
 
 if __name__ == '__main__':
+    
     new= tinkermodellor()
     new(r'/home/wayne/quanmol/TinkerModelling/tinkermodellor/gromacs.gro',r'/home/wayne/quanmol/TinkerModelling/tinkermodellor/gromacs.top')
 

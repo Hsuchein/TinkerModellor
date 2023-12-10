@@ -8,7 +8,7 @@ class GMXMolecule() :
         #Used for store the molecular name
         self.MoleculeName = None
         #Used for store the molecular type
-        self.AtomTypes: list[str] = [None]
+        self.AtomTypes: list[str] = []
         #Used for store the molecular bond
         self.Bonds: Union[List[int,int], List[str,str]] = []
         #Used for store the molecule Numbers
@@ -16,7 +16,7 @@ class GMXMolecule() :
 
     def __call__(self, name: str, 
                 atomtypes: List[str],
-                bonds: Union[List[int,int], List[str,str]]) -> None :
+                bonds: Union[List[int], List[str]]) -> None :
         """
         Construct the molecule
 
@@ -46,24 +46,27 @@ class GMXMolecule() :
         else:
             raise TypeError('AtomTypes must be a string list')
         
-    def _get_bonds(self, bonds: Union[List[int,int], List[str,str]]) -> None :
-        if isinstance(bonds,Union[List[int,int], List[str,str]]):
+    def _get_bonds(self, bonds: Union[List[int], List[str]]) -> None :
+        if isinstance(bonds,List):
             #create a list for each atom, the index is atom's index, the value is the index of the atom which is bonded to this atom
-            list = [None] * (len(bonds)+1)
-            
+            list = [[[]] for _ in range(len(self.AtomTypes)+1)]
+            #DEBUG##print(len(self.AtomTypes))
+
             #take value from bonds(list), and use the value as the index of list, then append the index of the value to the list
             for i in range(len(bonds)):
-                list[int(bonds[i][0])].append(bonds[i][1])
-                list[int(bonds[i][1])].append(bonds[i][0])
+                #print(bonds[i][0])
+                list[int(bonds[i][0])].append(int(bonds[i][1]))
+                list[int(bonds[i][1])].append(int(bonds[i][0]))
 
             #store the list to self.Bonds
+            #print(list)
             self.Bonds = list
         else:
             raise TypeError('Bonds must be a int or str list')
 
         
     def _check(self) -> None :
-        assert len(self.Bonds) == len(self.AtomTypes), 'The length of Bonds, AtomTypes and AtomCrds must be equal !'
+        assert len(self.Bonds) == len(self.AtomTypes)+1, f'The length of Bonds({len(self.Bonds)}), AtomTypes({len(self.AtomTypes)}) and AtomCrds must be equal !'
         self.AtomNums = len(self.AtomTypes)
 
 

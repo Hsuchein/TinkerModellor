@@ -1,5 +1,5 @@
 from ._water_ions_trans import WaterAndIonsForceField
-from para_trans._abc import FroceFieldTrans
+from .._abc import FroceFieldTrans
 from ._gaff import GAFFForceField
 from ._amberFF import AmberFF
 

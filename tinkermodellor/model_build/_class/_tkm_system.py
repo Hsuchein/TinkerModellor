@@ -1,6 +1,6 @@
 from ._gmxmolecule import GMXMolecule
 from typing import List, Union
-from tinkermodellor.para_trans.amoebabio18._forcefieldtrans import AmberGAFFTrans
+from ..para_trans.amoebabio18._forcefieldtrans import AmberGAFFTrans
 
 
 class TinkerModellorSystem() :
@@ -30,7 +30,7 @@ class TinkerModellorSystem() :
         self.trans = AmberGAFFTrans(Aggressive=aggressive)
 
         #Set entire system's name
-        if isinstance(name,None):
+        if name == None:
             self.MoleculeName = 'TinkerModellor Default Name'
         else:
             if isinstance(name,str):
@@ -39,9 +39,9 @@ class TinkerModellorSystem() :
                 raise TypeError('MoleculeName must be a string')
             
     def __call__(self, name: str ='TinkerModellor Default Name', 
-                atomcrds: Union[List[float,float,float],List[str,str,str]] = None,
+                atomcrds: Union[List[float],List[str]] = None,
                 molecule_class: GMXMolecule() = None,
-                atom_index: list[int,int] = None) -> None :
+                atom_index: list[int] = None) -> None :
         """
         Construct the Tinker XYZ format system
         Args:
@@ -61,14 +61,15 @@ class TinkerModellorSystem() :
         self._check_and_trans_atomtype()
        
     #Used for store each atom's atomtype, coordinates and topology
-    def _get_top_and_crd(self, molecule_class: GMXMolecule(), molecule_index: list[int,int],atomcrds: Union[List[float,float,float],List[str,str,str]]) -> None :
+    def _get_top_and_crd(self, molecule_class: GMXMolecule(), molecule_index: list[int,int],atomcrds: Union[List[float],List[str]]) -> None :
 
             #Transfrom the atomtype into AMEOBABIO18 force field
             tinker_atomtype = []
             for element in molecule_class.AtomTypes:
+                print(element)
                 trans_type = self.trans(element)
                 if trans_type == 'None':
-                    raise ValueError('Atomtype {} not found in force field'.format(element))
+                    raise ValueError(f'Atomtype {element} not found in force field')
                 else:
                     tinker_atomtype.append(self.trans(element))
             self.AtomTypes += tinker_atomtype
