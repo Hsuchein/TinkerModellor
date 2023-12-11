@@ -28,7 +28,7 @@ BOND_PATTERN = r"\s*([0-9]+)\s*([0-9]*)(\s*1\s*[0-9].[0-9]*\s[0-9]*.[0-9]*\n)"
 #                      Na+                    10
 #                      WAT                    9971
 #                 <-------- grp 1 ---------><grp 2 >
-MOLECULES_PATTERN = r"([A-Za-z0-9]*-?\+?\s*)([0-9]+\n)"
+MOLECULES_PATTERN = r"([A-Za-z0-9]*-?\+?\s*)([0-9]+\n)?"
 
 class tinkermodellor:
 
@@ -40,7 +40,7 @@ class tinkermodellor:
 
 
     #read top file
-    def read_top_file(self,top_path:str):
+    def _read_top_file(self,top_path:str):
         
         with open(top_path,'r') as f:
             lines=f.readlines()
@@ -101,11 +101,11 @@ class tinkermodellor:
             if molecules_flag and re.fullmatch(MOLECULES_PATTERN,line):
 
                 self.moleculetype_num.append(line.strip().split(' ')[-1])
-                #DEBUG##print(f"Detect a new molecule, and it has {self.moleculetype_num[-1]} molecules")
+                print(f"Detect a new molecule, and it has {self.moleculetype_num[-1]} molecules")
                 
         
 
-    def read_gro_file(self,gro_path):
+    def _read_gro_file(self,gro_path):
 
         with open(gro_path,'rt') as f:#read gro file
             lines = f.readlines()
@@ -113,27 +113,32 @@ class tinkermodellor:
             self.system_atom_nums = int(lines[1])
 
         #To record the entire system's coordinates
-        self.coordinates = []
+        self.coordinates = [None]
         for line in lines[2:-1]:
             line = line.strip().split('  ')#split into 5-6 items
             self.coordinates.append([float(i) for i in line[-3:]])
 
     def build_tkmsystem(self,gro_path:str, top_path:str):
 
-        self.read_top_file(top_path)
+        self._read_top_file(top_path)
         assert len(self.moleculetype)-1 == len(self.moleculetype_num), f'Number of Moleculetypes({len(self.moleculetype)}) in [ molecules ] Must Be Equal To Number({len(self.moleculetype_num)}) of [ moleculetype ]'
 
-        self.read_gro_file(gro_path)
+        self._read_gro_file(gro_path)
 
-        system = TinkerModellorSystem()
+        self.system = TinkerModellorSystem()
         #According to self.moleculetype to rebuild the Tinker XYZ format file
         #DEBUG##print(len(self.moleculetype_num))
         count = 0
         while count < len(self.moleculetype_num):
+            print("index is", self.system.AtomNums+1,self.system.AtomNums+self.moleculetype[count+1].AtomNums)
+            print("moleculetype is", self.moleculetype[count+1].MoleculeName, self.moleculetype[count+1].AtomTypes)
             for i in range(int(self.moleculetype_num[count])):
-                #print(self.moleculetype[count].AtomTypes)
-                system(atomcrds=self.coordinates,molecule_class=self.moleculetype[count],atom_index=[system.AtomNums+1,system.AtomNums+self.moleculetype[count].AtomNums])
+                self.system(atomcrds=self.coordinates,molecule_class=self.moleculetype[count+1],atom_index=[self.system.AtomNums+1,self.system.AtomNums+self.moleculetype[count+1].AtomNums])
             count +=1
+        #DEBUG##print(self.system.AtomCrds)
+    
+    def write_tkmsystem(self,xyz_path:str):
+        self.system.write(xyz_path)
 
 if __name__ == '__main__':
     
