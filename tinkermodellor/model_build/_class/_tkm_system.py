@@ -18,11 +18,11 @@ class TinkerModellorSystem() :
         #Used for store the molecular type
         self.AtomTypes: list[str] = [None]
         #Used for store the molecular bond
-        self.Bonds: Union[List[int,int], List[str,str]] = [None]
+        self.Bonds: Union[List[int], List[str]] = [None]
         #Used for store the molecule Numbers
         self.AtomNums: int = 0
         #Used for store the molecule coordinates
-        self.AtomCrds: Union[List[float,float,float],List[str,str,str]] = [None]
+        self.AtomCrds: Union[List[float],List[str]] = [None]
         
         #Used for store the atomtype transformation (into AMEOBABIO18 force field)
         if aggressive == True:
@@ -32,6 +32,7 @@ class TinkerModellorSystem() :
         #Set entire system's name
         if name == None:
             self.MoleculeName = 'TinkerModellor Default Name'
+
         else:
             if isinstance(name,str):
                 self.MoleculeName = name
@@ -63,31 +64,34 @@ class TinkerModellorSystem() :
     #Used for store each atom's atomtype, coordinates and topology
     def _get_top_and_crd(self, molecule_class: GMXMolecule(), molecule_index: list[int,int],atomcrds: Union[List[float],List[str]]) -> None :
 
-            #Transfrom the atomtype into AMEOBABIO18 force field
-            tinker_atomtype = []
-            for element in molecule_class.AtomTypes:
-                print(element)
-                trans_type = self.trans(element)
-                if trans_type == 'None':
-                    raise ValueError(f'Atomtype {element} not found in force field')
-                else:
-                    tinker_atomtype.append(self.trans(element))
-            self.AtomTypes += tinker_atomtype
+        #Transfrom the atomtype into AMEOBABIO18 force field
+        tinker_atomtype = []
+        for element in molecule_class.AtomTypes:
+            #DEBUG##print(element)
+            trans_type = self.trans(element)
+            if trans_type == 'None':
+                raise ValueError(f'Atomtype {element} not found in force field')
+            else:
+                tinker_atomtype.append(self.trans(element))
+        self.AtomTypes += tinker_atomtype
 
-            #Transform the topology into Tinker XYZ format with atom index correction
-            tinker_bonds = []
-            for element in molecule_class.Bonds:
-                #element might contain more than one bond,like [1,2,10]
-                corrected_bond = []
-                for number in element:
-                    corrected_bond += [int(number)+int(self.AtomNums)] 
-                tinker_bonds.append(corrected_bond)
-            self.Bonds += tinker_bonds.Bonds
+        #Transform the topology into Tinker XYZ format with atom index correction
+        tinker_bonds = []
+        #DEBUG##print(molecule_class.Bonds)
+        for element in molecule_class.Bonds[1:]:
+            #element might contain more than one bond,like [1,2,10]
+            corrected_bond = []
+            for number in element[1:]:
+                corrected_bond.append([int(number)+int(self.AtomNums)]) 
+            tinker_bonds.append(corrected_bond)
+        self.Bonds += tinker_bonds
 
-            #int(molecule_index[1])+1 : plus extra 1 is to make sure list contains the last index
-            self.AtomCrds += atomcrds[int(molecule_index[0]):int(molecule_index[1])+1]
+        #int(molecule_index[1])+1 : plus extra 1 is to make sure list contains the last index
+        self.AtomCrds += atomcrds[int(molecule_index[0]):int(molecule_index[1])+1]
         
     def _check_and_trans_atomtype(self) -> None :
+
+        #DEBUG##print(len(self.AtomTypes),len(self.AtomCrds),len(self.Bonds),self.AtomTypes[-1])
         assert len(self.Bonds) == len(self.AtomTypes) == len(self.AtomCrds), 'The length of Bonds, AtomTypes and AtomCrds must be equal !'
 
         #The first item of AtomTypes is None, so minus 1

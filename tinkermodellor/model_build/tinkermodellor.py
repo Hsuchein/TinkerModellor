@@ -90,7 +90,7 @@ class tinkermodellor:
                 #To match the BOND_PATTERN
                 match_bond = re.fullmatch(BOND_PATTERN,line)
                 if match_bond:
-                    print(line)
+                    #DEBUG##print(line)
                     bond_read.append([int(match_bond.group(1)),int(match_bond.group(2))])
             
             
@@ -127,10 +127,11 @@ class tinkermodellor:
 
         system = TinkerModellorSystem()
         #According to self.moleculetype to rebuild the Tinker XYZ format file
-        count = 1
-        while count <= len(self.moleculetype_num):
+        #DEBUG##print(len(self.moleculetype_num))
+        count = 0
+        while count < len(self.moleculetype_num):
             for i in range(int(self.moleculetype_num[count])):
-                print(self.moleculetype[count].AtomTypes)
+                #print(self.moleculetype[count].AtomTypes)
                 system(atomcrds=self.coordinates,molecule_class=self.moleculetype[count],atom_index=[system.AtomNums+1,system.AtomNums+self.moleculetype[count].AtomNums])
             count +=1
 

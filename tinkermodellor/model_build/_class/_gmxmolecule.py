@@ -41,6 +41,7 @@ class GMXMolecule() :
             raise TypeError('MoleculeName must be a string')
         
     def _get_atomtypes(self, atomtypes: List[str]) -> None :
+        
         if isinstance(atomtypes,list):
             self.AtomTypes += atomtypes
         else:

@@ -21,6 +21,7 @@ class GAFFForceField:
         'n':1,
         'n3':37,
         'n4':41,
+        'n8':1,
         'nh':29,
         'no':1,
         'nb':29,   
