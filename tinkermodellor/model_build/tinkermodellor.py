@@ -64,7 +64,7 @@ class tinkermodellor:
 
             
             if '[ moleculetype ]' in line:
-                print("Detect a new moleculetype")
+                #DEBUG##print("Detect a new moleculetype")
                 
                 #To add items into moleculetype(GMXMolecule)
                 if molecule_type_count > 0:
@@ -116,7 +116,7 @@ class tinkermodellor:
         self.coordinates = [None]
         for line in lines[2:-1]:
             line = line.strip().split('  ')#split into 5-6 items
-            self.coordinates.append([float(i) for i in line[-3:]])
+            self.coordinates.append([float(i)*10 for i in line[-3:]])
 
     def build_tkmsystem(self,gro_path:str, top_path:str):
 
