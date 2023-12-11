@@ -1,13 +1,21 @@
 class AmberFF:
-    
-    _amberff_para = {
+    """
+    Amber force field parameters
+    """
+
+    amberff_para = {
         'H':4,
+        'HA':6,
         'HC':6,
         'HO':11,
         'HS':13,
         'H2':4,
         'H3':42,
+        'HP':4,
+        'H1':4,
         'C':22,
+        'CO':8,
+        'CX':7,
         'CA':22,
         'CT':2,
         'CB':22,
@@ -20,6 +28,7 @@ class AmberFF:
         'CV':22,
         'CW':22,
         'C*':22,
+        'C8':16,
         'N':1,
         'NA':1,
         'NB':1,
@@ -34,9 +43,14 @@ class AmberFF:
         'O2':5,
         'S':12,
         'SH':12,
-    }
+        }
 
-    _unpair_amberff_para = {
+    unpair_amberff_para = {
+    	'H5':18,
+    	'H4':18,
+    	'3C':7,
+    	'2C':7,
+    	'XC':7,
         'CD':22,
         'CE':22,
         'CF':22,
@@ -47,8 +61,4 @@ class AmberFF:
         'CP':22,
         'C2':7,
         'C3':7,
-    }
-
-    def __init__(self):
-        pass
-    
+        }

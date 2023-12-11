@@ -1,5 +1,9 @@
 from typing import Union
-from .para_trans.amoebabio18._forcefieldtrans import AmberGAFFTrans 
+from para_trans.amoebabio18._forcefieldtrans import AmberGAFFTrans 
+
+#temporarily not used 2023.12.06
+#temporarily not used 2023.12.06
+#temporarily not used 2023.12.06
 
 class TinkerModellorAtom():
 
@@ -11,7 +15,7 @@ class TinkerModellorAtom():
                  topology:list = [], 
                  forcefield:str = 'AmberGAFFtoAMOEBABIO18', 
                  Aggressive:bool = False,
-                 TinkerAtomType:Union[str,int] = None,):
+                 TinkerAtomType:Union[str,int] = None):
         """TinkerModellorAtom Initialization
 
         Args:
@@ -55,7 +59,7 @@ class TinkerModellorAtom():
 
         if isinstance(forcefield, str):
             if forcefield == 'AmberGAFFtoAMOEBABIO18':
-                self.AmberGAFFtoAMOEBABIO18Trans = AmberGAFFTrans(Aggressive)
+                self.TransFunc = AmberGAFFTrans(Aggressive)
             else:
                 raise ValueError('For now, noly AmberGAFFtoAMOEBABIO18 is implemented')
         else :
@@ -69,4 +73,4 @@ class TinkerModellorAtom():
 
 
         def __call__(self):
-            self.TinkerAtomType = self.AmberGAFFtoAMOEBABIO18Trans(self.atomtype)
+            self.TinkerAtomType = self.TransFunc(self.atomtype)

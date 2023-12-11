@@ -12,4 +12,4 @@ class FroceFieldTrans(metaclass=ABCMeta):
         pass
         
     def _transform_to_tinker(self, atom_type : str, trans_dict : dict) -> str:
-        return trans_dict.items(atom_type)
+        return trans_dict.get(atom_type, 'None')
