@@ -11,10 +11,10 @@ import re
 #(ligand)                  1                  ca                            1                 MOL                C                  1            0.00000000        12.010736
 #(protein)                33                  C                           248                 GLU                C                 33            0.5366            12.01
 #(protein)                34                  O                           248                 GLU                O                 34           -0.5819            16                               ; qtot 0
-#                      <- group 1 -> <------------grp 2------------> <-------------------------------------------------------------- grp 3 -------------------------------------------------------> <--------------- grp 4 --------------->
+#                      <----------------------------------grp 1----------------------> <----- grp 2 -----> <--- grp 3 ---><-------------------------------- grp 4 ----------------------------------->
 #
-ATOMTYPE_PATTERN = r"(\s*[0-9]+\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?)(\*?\s*[0-9]+\s*[0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*[0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*[0-9]+\s*-?[0-9]+\.[0-9]+\s*[0-9]+\.*[0-9]*)(\s*;\s*[a-z]*\s*-?[0-9]*.[0-9]*\s*\n)?"
-
+SYSTEM_ATOMTYPE_PATTERN = r"(\s*[0-9]+\s*[0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\*?\s*[0-9]+\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]+\s*-?[0-9]+\.[0-9]+\s*[0-9]+\.*[0-9]*)(\s*;\s*[a-z]*\s*-?[0-9]*.[0-9]*\s*\n)?"
+LIGAND_ATOMTYPE_PATTERN = r'(\s*[0-9]+\s*)([0-9a-z]*)(\s*[0-9]+)(\s*[a-zA-Z][0-9a-zA-Z]*)(\s*[0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?)(\s*[0-9]+\s*-?[0-9]+\.[0-9]+\s*[0-9]+\.*[0-9]*)(\s*;\s*[a-z]*\s*-?[0-9]*.[0-9]*\s*\n)?'
 
 #[ bonds ]
 #;                    ai          aj     funct         c0         c1         c2         c3
@@ -71,22 +71,30 @@ class TinkerModellor:
                     #print(atomtype_read)
                     #print(molecule_type_count)
                     #print(bond_read)
-                    self.moleculetype[molecule_type_count](f'TKM{molecule_type_count}',atomtype_read,bond_read)
+                    self.moleculetype[molecule_type_count](f'TKM{molecule_type_count}',atomtype_read, atomresidue_read, bond_read)
       
                 #Build a new GMXMolecule class to store a new moleculetype
                 molecule_type_count += 1
                 self.moleculetype.append(GMXMolecule())    
                 atomtype_read = []
                 bond_read = []
+                atomresidue_read = []
                 continue
 
             #Only when the molecule type is not empty, the program would read the information
             if molecule_type_count > 0 and molecules_flag == False:
 
-                #To match the ATOMTYPE_PATTERN
-                match_atomtype = re.fullmatch(ATOMTYPE_PATTERN,line)
+                #To match the ATOMTYPE_PATTE
+                match_atomtype = re.fullmatch(SYSTEM_ATOMTYPE_PATTERN,line)
                 if match_atomtype:
-                    atomtype_read.append(match_atomtype.group(2))
+                    ligand_atomtype =re.fullmatch(LIGAND_ATOMTYPE_PATTERN,line)
+                    if ligand_atomtype:
+                        atomtype_read.append(match_atomtype.group(2).replace(' ', ''))
+                        atomresidue_read.append(re.sub(r'\d', '', match_atomtype.group(4)).replace(' ', ''))
+                    else:
+                        atomtype_read.append(match_atomtype.group(3)[:4].replace(' ', ''))
+                        atomresidue_read.append(re.sub(r'\d', '', match_atomtype.group(2)).replace(' ', ''))
+
                 #To match the BOND_PATTERN
                 match_bond = re.fullmatch(BOND_PATTERN,line)
                 if match_bond:
@@ -95,7 +103,7 @@ class TinkerModellor:
             
             
             if '[ molecules ]' in line:
-                self.moleculetype[molecule_type_count](f'TKM{molecule_type_count}',atomtype_read,bond_read)
+                self.moleculetype[molecule_type_count](f'TKM{molecule_type_count}',atomtype_read, atomresidue_read, bond_read)
                 molecules_flag =True
 
             if molecules_flag and re.fullmatch(MOLECULES_PATTERN,line):
@@ -116,7 +124,11 @@ class TinkerModellor:
         self.coordinates = [None]
         for line in lines[2:-1]:
             line = line.strip().split('  ')#split into 5-6 items
+
+            #To record the entire system's coordinates
             self.coordinates.append([float(i)*10 for i in line[-3:]])
+
+
 
     def build_tkmsystem(self,gro_path:str, top_path:str):
 
@@ -130,8 +142,8 @@ class TinkerModellor:
         #DEBUG##print(len(self.moleculetype_num))
         count = 0
         while count < len(self.moleculetype_num):
-            print("index is", self.system.AtomNums+1,self.system.AtomNums+self.moleculetype[count+1].AtomNums)
-            print("moleculetype is", self.moleculetype[count+1].MoleculeName, self.moleculetype[count+1].AtomTypes)
+            print("Molecule's index is", self.system.AtomNums+1,self.system.AtomNums+self.moleculetype[count+1].AtomNums)
+            #DEBUG##print("moleculetype is", self.moleculetype[count+1].MoleculeName, self.moleculetype[count+1].AtomTypes)
             for i in range(int(self.moleculetype_num[count])):
                 self.system(atomcrds=self.coordinates,molecule_class=self.moleculetype[count+1],atom_index=[self.system.AtomNums+1,self.system.AtomNums+self.moleculetype[count+1].AtomNums])
             count +=1

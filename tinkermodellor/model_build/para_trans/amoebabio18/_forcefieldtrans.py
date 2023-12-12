@@ -1,7 +1,7 @@
 from ._water_ions_trans import WaterAndIonsForceField
 from .._abc import FroceFieldTrans
 from ._gaff import GAFFForceField
-from ._amberFF import AmberFF
+from ._amber import AmberForceFieldDict
 
 class AmberGAFFTrans(FroceFieldTrans):
     
@@ -18,19 +18,41 @@ class AmberGAFFTrans(FroceFieldTrans):
         """
         
         super().__init__()
+
+        #Preparation for the abnormal(water/ions/ligand)force field transformation
         self.aggressive = Aggressive
         self.FFpara = {}
-        supported_FFpara = [WaterAndIonsForceField.water_para,WaterAndIonsForceField.ion_para,GAFFForceField.gaff_para,AmberFF.amberff_para]
+        supported_FFpara = [WaterAndIonsForceField.water_para,WaterAndIonsForceField.ion_para,GAFFForceField.gaff_para]
         
         for i in supported_FFpara:
             self.FFpara.update(i) 
         
         if self.aggressive:
-            additional_FFpara = [GAFFForceField.unpair_gaff_para,AmberFF.unpair_amberff_para]
+            additional_FFpara = [GAFFForceField.unpair_gaff_para]
             for i in additional_FFpara : self.FFpara.update(i)
         
+        #Preparation for the normal(amino acid)force field transformation
+        self.force_field_dict = AmberForceFieldDict._amberpara
+        self.residue_list =  [
+            "ALA", "ARG", "ASN", "ASP", "CYS",
+            "GLN", "GLU", "GLY", "HIE", "ILE",
+            "LEU", "LYS", "MET", "PHE", "PRO",
+            "SER", "THR", "TRP", "TYR", "VAL"]
 
-    def __call__(self, atom_type: str) -> str:
-        return self._transform_to_tinker(atom_type,self.FFpara)        
 
+    def __call__(self,atom_residue:str, atom_type: str) -> str:
+        return self._transform_to_tinker(atom_type,atom_residue)        
     
+    def _transform_to_tinker(self, atom_type: str, atom_residue: str) -> str:
+    
+        #To check whether the residue is normal residue
+        #Normal residue: LYS, ARG, GLU, etc.
+        if atom_residue in self.residue_list:
+            return 'None'
+
+        #Abnormal residue: WAT, LIG, Na+, etc.
+        else:
+            return self.FFpara.get(atom_type, 'None')
+
+    def get_atom_type(self,amino_acid, atom_name):
+        return self.force_field_dict.get((amino_acid, atom_name), "Unknown")

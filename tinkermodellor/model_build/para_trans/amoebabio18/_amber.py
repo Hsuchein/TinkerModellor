@@ -1,0 +1,6 @@
+class AmberForceFieldDict:
+    
+    _amberpara={
+        }
+
+    
