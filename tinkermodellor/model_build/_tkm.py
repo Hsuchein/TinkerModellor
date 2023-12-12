@@ -89,8 +89,8 @@ class TinkerModellor:
                 if match_atomtype:
                     ligand_atomtype =re.fullmatch(LIGAND_ATOMTYPE_PATTERN,line)
                     if ligand_atomtype:
-                        atomtype_read.append(match_atomtype.group(2).replace(' ', ''))
-                        atomresidue_read.append(re.sub(r'\d', '', match_atomtype.group(4)).replace(' ', ''))
+                        atomtype_read.append(ligand_atomtype.group(2).replace(' ', ''))
+                        atomresidue_read.append(re.sub(r'\d', '', match_atomtype.group(2)).replace(' ', ''))
                     else:
                         atomtype_read.append(match_atomtype.group(3)[:4].replace(' ', ''))
                         atomresidue_read.append(re.sub(r'\d', '', match_atomtype.group(2)).replace(' ', ''))
@@ -142,7 +142,8 @@ class TinkerModellor:
         #DEBUG##print(len(self.moleculetype_num))
         count = 0
         while count < len(self.moleculetype_num):
-            print("Molecule's index is", self.system.AtomNums+1,self.system.AtomNums+self.moleculetype[count+1].AtomNums)
+            print('\n')
+            print(f"Molecule's index is from", self.system.AtomNums+1,'to',self.system.AtomNums+self.moleculetype[count+1].AtomNums*int(self.moleculetype_num[count]))
             #DEBUG##print("moleculetype is", self.moleculetype[count+1].MoleculeName, self.moleculetype[count+1].AtomTypes)
             for i in range(int(self.moleculetype_num[count])):
                 self.system(atomcrds=self.coordinates,molecule_class=self.moleculetype[count+1],atom_index=[self.system.AtomNums+1,self.system.AtomNums+self.moleculetype[count+1].AtomNums])

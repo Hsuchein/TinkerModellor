@@ -48,11 +48,15 @@ class AmberGAFFTrans(FroceFieldTrans):
         #To check whether the residue is normal residue
         #Normal residue: LYS, ARG, GLU, etc.
         if atom_residue in self.residue_list:
-            return 'None'
+            return self.get_atom_type(atom_residue, atom_type)
 
         #Abnormal residue: WAT, LIG, Na+, etc.
         else:
             return self.FFpara.get(atom_type, 'None')
 
-    def get_atom_type(self,amino_acid, atom_name):
-        return self.force_field_dict.get((amino_acid, atom_name), "Unknown")
+    def get_atom_type(self,atom_residue, atom_type):
+        residue_dict = self.force_field_dict.get((atom_residue), "None")
+        if residue_dict == "None":
+            return "None"
+        else:
+            return residue_dict.get((atom_type), "None")
