@@ -30,7 +30,7 @@ BOND_PATTERN = r"\s*([0-9]+)\s*([0-9]*)(\s*1\s*[0-9].[0-9]*\s[0-9]*.[0-9]*\n)"
 #                 <-------- grp 1 ---------><grp 2 >
 MOLECULES_PATTERN = r"([A-Za-z0-9]*-?\+?\s*)([0-9]+\n)?"
 
-class tinkermodellor:
+class TinkerModellor:
 
     def __init__(self) -> None:
         pass
