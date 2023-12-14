@@ -1,1 +1,0 @@
-from .tinkermodellor import tinkermodellor

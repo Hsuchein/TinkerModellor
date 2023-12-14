@@ -13,9 +13,12 @@ class GMXMolecule() :
         self.Bonds: Union[List[int,int], List[str,str]] = []
         #Used for store the molecule Numbers
         self.AtomNums: int = 0
+        #Used for store the molecule residue name
+        self.AtomResidue: list[str] = []
 
     def __call__(self, name: str, 
                 atomtypes: List[str],
+                atomeresiudes: List[str],
                 bonds: Union[List[int], List[str]]) -> None :
         """
         Construct the molecule
@@ -30,7 +33,7 @@ class GMXMolecule() :
             None
         """
         self._get_moleculename(name)
-        self._get_atomtypes(atomtypes)
+        self._get_atomtypes_and_residues(atomtypes,atomeresiudes)
         self._get_bonds(bonds)
         self._check()
 
@@ -40,12 +43,17 @@ class GMXMolecule() :
         else:
             raise TypeError('MoleculeName must be a string')
         
-    def _get_atomtypes(self, atomtypes: List[str]) -> None :
+    def _get_atomtypes_and_residues(self, atomtypes: List[str], atomresidues:List[str]) -> None :
         
         if isinstance(atomtypes,list):
             self.AtomTypes += atomtypes
         else:
             raise TypeError('AtomTypes must be a string list')
+        
+        if isinstance(atomresidues,list):
+            self.AtomResidue += atomresidues
+        else:
+            raise TypeError('AtomResidue must be a string list')
         
     def _get_bonds(self, bonds: Union[List[int], List[str]]) -> None :
         if isinstance(bonds,List):
