@@ -42,7 +42,7 @@ outfile_name -k [True/False] -p [CHARMM/GROMACS]
 **Paras:**  
 
 for *GROMACS_FILE* :  
-**-p** GROMACS
+**-p** GROMACS  
 **-g** gro_file_path  
 **-t** top_file_path  
 **-o** outfile_name
