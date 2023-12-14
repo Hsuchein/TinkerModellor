@@ -13,6 +13,7 @@ text
 To install TinkerModelling, either clone this git repository or try to download with pip.
 
 ``` sh
+# in cmd
 pip install tinkermodelling
 ```
 
@@ -23,6 +24,7 @@ all the code based on python above 3.6
 In order to automatically run the TinkerModelling tests, execute the following:
 
 ``` sh
+# in cmd
 ## Testing TinkerModelling
 pytest test
 ```
@@ -32,6 +34,7 @@ pytest test
 you can run the excute file locally with the following command in cmd
 
 ```sh
+# in cmd
 python tkm.py -g gro_file -t top_file -o 
 outfile_name -k [True/False] -p [CHARMM/GROMACS]
 ```
@@ -56,10 +59,12 @@ you can set parameter **k** to decide whether keeping the temporary files or not
 or you can run the following command in cmd to use **TinkerModelling** as a lib
 
 ``` sh
+# in cmd
 pip install tinkermodellor
 ```
 
 ``` python
+# in python
 import tinkermodellor as tkm
 new= tkm()
 new('gromacs.gro',gromacs.top')
@@ -70,9 +75,9 @@ new.write_tkmsystem('gromacs.xyz')
 
 The following people have contributed directly to the coding and validation efforts in Tinkermodellor. And a special thanks to all of you who helped improve this project either by providing feedback, bug reports, or other general comments!
 
-Xujian Wang |   email
+Xujian Wang |   <Hsuchein0126@outlook.com>
 
-Haodong Liu |   <haodonliu@foxmail.com>/1095474987@qq.com
+Haodong Liu |   <haodonliu@foxmail.com>
 
 ## License
 
