@@ -47,6 +47,7 @@ class GMXMolecule() :
         
         if isinstance(atomtypes,list):
             self.AtomTypes += atomtypes
+            print(self.AtomTypes)
         else:
             raise TypeError('AtomTypes must be a string list')
         
@@ -59,11 +60,12 @@ class GMXMolecule() :
         if isinstance(bonds,List):
             #create a list for each atom, the index is atom's index, the value is the index of the atom which is bonded to this atom
             list = [[[]] for _ in range(len(self.AtomTypes)+1)]
-            #DEBUG##print(len(self.AtomTypes))
+            print(len(self.AtomTypes))
 
             #take value from bonds(list), and use the value as the index of list, then append the index of the value to the list
             for i in range(len(bonds)):
-                #print(bonds[i][0])
+                #DEBUG##print(bonds)
+                #print(i)
                 list[int(bonds[i][0])].append(int(bonds[i][1]))
                 list[int(bonds[i][1])].append(int(bonds[i][0]))
 

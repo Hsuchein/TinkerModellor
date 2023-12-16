@@ -37,7 +37,7 @@ class AmberGAFFTrans(FroceFieldTrans):
             "ALA", "ARG", "ASN", "ASP", "CYS",
             "GLN", "GLU", "GLY", "HIE", "ILE",
             "LEU", "LYS", "MET", "PHE", "PRO",
-            "SER", "THR", "TRP", "TYR", "VAL"]
+            "SER", "THR", "TRP", "TYR", "VAL","HIS"]
 
 
     def __call__(self,atom_residue:str, atom_type: str) -> str:

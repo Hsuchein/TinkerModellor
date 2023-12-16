@@ -4,12 +4,12 @@ import re
 from tinkermodellor import TinkerModellor as tkm
 
 
-TINKER_XYZ = r'\s*[0-9]*\s*[a-zA-Z0-9]*\+?-?\s*[0-9]+.[0-9]+\s+[0-9]+.[0-9]+\s+[0-9]+.[0-9]+\s+[0-9A-Za-z]+\s*[0-9]*\s*[0-9]*\s*[0-9]*\s*[0-9]*\n'
+TINKER_XYZ = r'\s*[0-9]*\s*[a-zA-Z0-9]*\+?-?\s*\+?-?[0-9]+.[0-9]+\s+\+?-?[0-9]+.[0-9]+\s+\+?-?[0-9]+.[0-9]+\s+[0-9A-Za-z]+\s*[0-9]*\s*[0-9]*\s*[0-9]*\s*[0-9]*\n'
 
 system = tkm()
 
 @pytest.mark.parametrize('data', 
-    ['complex-gromacs'])
+    ['complex-gromacs','1ALB','1BHZ','134L'])
 def test_atom_align_dict(data, get_file_path):
     """Test that both __call__ and map methods return the expected atom map."""
     gro, top = get_file_path(data)

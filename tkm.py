@@ -37,6 +37,17 @@ if __name__ == '__main__':
                         help = 'the program you create the system with , default is GROMACS.', 
                         )
     
+
+    top_file = '/home/wayne/quanmol/TinkerModellor/test/dataset/1BHZ/gromacs.top'
+    gro_file = '/home/wayne/quanmol/TinkerModellor/test/dataset/1BHZ/gromacs.gro'
+    out_file = '/home/wayne/quanmol/TinkerModellor/tinker.xyz'
+    tkm= TinkerModellor()
+    tkm(top_file=top_file,gro_file=gro_file)
+    tkm.write_tkmsystem(xyz_path=out_file)
+
+
+
+'''  
     args = parser.parse_args()
     top_file = args.topology_file
     gro_file = args.location_file
@@ -65,3 +76,5 @@ if __name__ == '__main__':
         if args.keep == False:
             os.remove('./temp.gro')
             os.remove('./temp.top')
+'''  
+
