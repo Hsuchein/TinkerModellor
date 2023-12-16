@@ -1,4 +1,4 @@
-from tinkermodellor.model_build.tinkermodellor import tinkermodellor
+from tinkermodellor.model_build._tkm import TinkerModellor
 import argparse
 import os
 import parmed as pmd
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     if program == 'A':
 
-        tkm= tinkermodellor()
+        tkm= TinkerModellor()
         tkm(top_file=top_file,gro_file=gro_file)
         tkm.write_tkmsystem(xyz_path=out_file)
 
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         charmm.save('./temp.gro')
         charmm.save('./temp.top')
 
-        tkm= tinkermodellor()
+        tkm= TinkerModellor()
         top_file = './temp.top'
         gro_file = './temp.gro'
         tkm(top_file=top_file,gro_file=gro_file)

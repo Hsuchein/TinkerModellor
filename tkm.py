@@ -1,4 +1,4 @@
-from tinkermodellor.model_build.tinkermodellor import tinkermodellor
+from tinkermodellor.model_build._tkm import TinkerModellor
 import argparse
 import os
 import parmed as pmd
@@ -8,63 +8,58 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser(description='command line for tinkermodellor', formatter_class=argparse.RawTextHelpFormatter)
     
-    parser.add_argument('--grofile',
-                        '-g', 
+    parser.add_argument('-l','--location_file',
                         type = str,
-                        help = 'grofile,the path to gro file you want to process , prmtop when program is CHARMM',
+                        help ='location_file , the path to the location_file of the system.Support: Amber(.inpcrd),CHARMM(.crd),GROMACS(.gro)',
                         required = True)
     
-    parser.add_argument('--topfile', 
-                        '-t', 
+    parser.add_argument('-t','--topology_file', 
                         type = str,
-                        help = 'topfile,the path to top file you want to process,which should be ralted to gro file , inpcrd when program is CHARMM', 
+                        help = 'topology_file,the path to location top file of the system.Support: Amber(.prmtop),CHARMM(.psf),GROMACS(.top)', 
                         required = True)
     
-    parser.add_argument('--outfile', 
-                        '-o', 
+    parser.add_argument('-o','--outfile', 
                         type = str,
                         default= os.path.join(os.getcwd(),time.ctime().split(' ')[-2].replace(':','_')+'.xyz'),
-                        help = 'out file path , take current paths concat time as default', 
+                        help = 'out file path , take current paths concat time as default , as "./sec_min_hour.xyz",Format: tinker(.xyz)', 
                         )
     
-    parser.add_argument('--keep', 
-                        '-k', 
+    parser.add_argument('-k','--keep', 
                         type = bool,
                         default = False,
-                        help = 'if the file create by CHARMM , Parmed will be operated to trans the file , which will create a temporary file and will be removed automaticly , you can chioce whether to keep it', 
+                        help = 'Parmed will read the input file and then trans it , which will create two temporary file and will be removed automaticly , you can chioce whether to keep it ', 
                         )
     
-    parser.add_argument('--program', 
-                        '-p', 
+    parser.add_argument('-p','--program', 
                         type = str,
-                        choices = ['AMBER','CHARMM'],
-                        default = 'A',
-                        help = 'project,the program you creat the file before', 
+                        choices = ['AMBER','CHARMM','GROMACS'],
+                        default = 'GROMACS' ,
+                        help = 'the program you create the system with , default is GROMACS.', 
                         )
     
     args = parser.parse_args()
-    top_file = args.topfile
-    gro_file = args.grofile
+    top_file = args.topology_file
+    gro_file = args.location_file
     out_file = args.outfile
     keep = args.keep
-    program = str(args.program[0]).upper()
+    program = args.program
     
-    if program == 'A':
+    if program == 'GROMACS' :
 
-        tkm= tinkermodellor()
+        tkm= TinkerModellor()
         tkm(top_file=top_file,gro_file=gro_file)
         tkm.write_tkmsystem(xyz_path=out_file)
 
-    if program == 'C':
+    if program == 'CHARMM' or program == 'AMBER' :
 
-        charmm = pmd.load_file(args.topfile,args.grofile)
+        charmm = pmd.load_file(args.topology_file,args.location_file)
         charmm.save('./temp.gro')
         charmm.save('./temp.top')
 
-        tkm= tinkermodellor()
-        top_file = './temp.top'
-        gro_file = './temp.gro'
-        tkm(top_file=top_file,gro_file=gro_file)
+        tkm= TinkerModellor()
+        topology_file = './temp.top'
+        location_file = './temp.gro'
+        tkm(topology_file=top_file,gro_file=location_file)
         tkm.write_tkmsystem(xyz_path=out_file)
 
         if args.keep == False:

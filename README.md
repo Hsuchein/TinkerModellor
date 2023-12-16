@@ -2,72 +2,107 @@
 
 ## Badges
 
-![(Build/Test Status)](Tests/badge.svg)
+![(Build/Test Status)](Tests/badge.svg)  
+**[need to be append after finish pytest]**
 
 ## Description
 
-text
+text  
+**[needs to be written]**
 
 ## Installing TinkerModelling
 
-To install TinkerModelling, either clone this git repository or try to download with pip.
+### System Requirements
+
+- Python 3.6+
+
+### To install TinkerModelling  
+
+There are several ways to install TinkerModelling , anyone of them is fine.
+
+- download the zip file from the repository and extract it.open the terminal and go to the folder where you extracted the zip file.then run the code below in command in the terminal.
+
+```sh
+python ./setup.py install
+```
+
+- open the terminal and then use the code below to clone this git and then use setup.py to install.
+  
+```sh
+git clone https://github.com/Hsuchein/TinkerModellor.git
+cd TinkerModellor
+python ./setup.py install
+```
+
+- open the terminal and then use the code below to download via pip.
 
 ``` sh
-# in cmd
 pip install tinkermodelling
 ```
 
 ## Testing ParmEd
 
-all the code based on python above 3.6
-
-In order to automatically run the TinkerModelling tests, execute the following:
+In order to automatically run the TinkerModelling tests, execute the following code in terminal:
 
 ``` sh
-# in cmd
-## Testing TinkerModelling
 pytest test
 ```
 
 ## how to use
 
-you can run the excute file locally with the following command in cmd
+### 1. Terminal
+
+you can run the excute file locally with the following command in terminal.
 
 ```sh
-# in cmd
-python tkm.py -g gro_file -t top_file -o 
-outfile_name -k [True/False] -p [CHARMM/GROMACS]
+    python tkm.py -l location_file -t topology_file -o 
+    outfile_name -k [True/False] -p [CHARMM/GROMACS]
 ```
 
-**Paras:**  
+#### options
 
-for *GROMACS_FILE* :  
-**-p** GROMACS  
-**-g** gro_file_path  
-**-t** top_file_path  
-**-o** outfile_name
+- **-h** --help  
 
-for *CHARMM_FILE* :  
+    show this help message and exit
 
-**-p** CHARMM  
-Parmed is prepared to transfer the *CHARMM_FILE* into temporary *GROMACS_FILE*  
-**-t** prmtop_file  
-**-g** crd_file  
-**-k** [True/False]  
-you can set parameter **k** to decide whether keeping the temporary files or not.  
+- **-l** LOCATION_FILE, **--location_file** LOCATION_FILE  
 
-or you can run the following command in cmd to use **TinkerModelling** as a lib
+    location_file , the path to the location_file of the system.  
 
-``` sh
-# in cmd
-pip install tinkermodellor
-```
+    *Support:* Amber(.inpcrd),CHARMM(.crd),GROMACS(.gro)
+
+- **-t** TOPOLOGY_FILE, **--topology_file** TOPOLOGY_FILE  
+
+    topology_file,the path to location top file of the system.  
+
+    *Support:* Amber(.prmtop),CHARMM(.psf),GROMACS(.top)
+
+- **-o** OUTFILE, **--outfile** OUTFILE  
+
+    out file path , take current paths concat time as default , as './sec_min_hour.xyz' .
+
+    *Format:* tinker(.xyz)
+
+- **-k** KEEP, **--keep** KEEP  
+
+    *Parmed* will read the input file and then trans it , which will create two temporary file and will be removed automaticly , you can chioce whether to keep it .
+
+    *Support:* True/False
+
+- **-p** {AMBER,CHARMM,GROMACS}, **--program** {AMBER,CHARMM,GROMACS}
+
+    the program you create the system with , default is GROMACS.
+
+    *Support:* AMBER/CHARMM/GROMACS
+
+### 2. Python API
+
+you can  use *TinkerModelling* as a lib too.
 
 ``` python
-# in python
 import tinkermodellor as tkm
 new= tkm()
-new('gromacs.gro',gromacs.top')
+new('gromacs.gro','gromacs.top')
 new.write_tkmsystem('gromacs.xyz')
 ```
 
@@ -98,7 +133,8 @@ see more information in the license file.
 ## Citation
 
 If you use this software in your research, you can cite the following paper:  
-**ref**
+
+**[need to be append]**
 
 ## Reference
 

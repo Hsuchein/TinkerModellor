@@ -155,6 +155,6 @@ class TinkerModellor:
 
 if __name__ == '__main__':
     
-    new= tinkermodellor()
+    new= TinkerModellor()
     new(r'/home/wayne/quanmol/TinkerModelling/tinkermodellor/gromacs.gro',r'/home/wayne/quanmol/TinkerModelling/tinkermodellor/gromacs.top')
 
