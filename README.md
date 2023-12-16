@@ -3,24 +3,24 @@
 ## Badges
 
 ![(Build/Test Status)](Tests/badge.svg)  
-**[need to be append after finish pytest]**
+**[need to be append after finishing pytest]**
 
 ## Description
 
 text  
 **[needs to be written]**
 
-## Installing TinkerModelling
+## Installation
 
 ### System Requirements
 
 - Python 3.6+
 
-### To install TinkerModelling  
+### Methods  
 
-There are several ways to install TinkerModelling , anyone of them is fine.
+There are several ways to install TinkerModelling.
 
-- download the zip file from the repository and extract it.open the terminal and go to the folder where you extracted the zip file.then run the code below in command in the terminal.
+- download the zip file from the repository and extract it. open the terminal and go to the folder where you extracted the zip file. then run the code below in the terminal.
 
 ```sh
 python ./setup.py install
@@ -40,9 +40,9 @@ python ./setup.py install
 pip install tinkermodelling
 ```
 
-## Testing ParmEd
+## Testing
 
-In order to automatically run the TinkerModelling tests, execute the following code in terminal:
+To automatically run the TinkerModelling tests, execute the following code in the terminal:
 
 ``` sh
 pytest test
@@ -52,11 +52,11 @@ pytest test
 
 ### 1. Terminal
 
-you can run the excute file locally with the following command in terminal.
+you can run the executed file locally with the following command in the terminal.
 
 ```sh
     python tkm.py -l location_file -t topology_file -o 
-    outfile_name -k [True/False] -p [CHARMM/GROMACS]
+    outfile_name -k [True/False] -p [CHARMM/GROMACS/AMBER]
 ```
 
 #### options
@@ -69,29 +69,29 @@ you can run the excute file locally with the following command in terminal.
 
     location_file , the path to the location_file of the system.  
 
-    *Support:* Amber(.inpcrd),CHARMM(.crd),GROMACS(.gro)
+    *Support:* AMBER(.inpcrd),CHARMM(.crd),GROMACS(.gro)
 
 - **-t** TOPOLOGY_FILE, **--topology_file** TOPOLOGY_FILE  
 
-    topology_file,the path to location top file of the system.  
+    topology_file, the path to the location of the top file of the system.  
 
-    *Support:* Amber(.prmtop),CHARMM(.psf),GROMACS(.top)
+    *Support:* AMBER(.prmtop),CHARMM(.psf),GROMACS(.top)
 
 - **-o** OUTFILE, **--outfile** OUTFILE  
 
-    out file path , take current paths concat time as default , as './sec_min_hour.xyz' .
+    out file path, take current paths concat time as default, as './sec_min_hour.xyz'.
 
-    *Format:* tinker(.xyz)
+    *Format:* TINKER(.xyz)
 
 - **-k** KEEP, **--keep** KEEP  
 
-    *Parmed* will read the input file and then trans it , which will create two temporary file and will be removed automaticly , you can chioce whether to keep it .
+    *Parmed* will read the input file and then transfer it, which will create two temporary files and will be removed automatically, you can choose whether to keep it.
 
     *Support:* True/False
 
 - **-p** {AMBER,CHARMM,GROMACS}, **--program** {AMBER,CHARMM,GROMACS}
 
-    the program you create the system with , default is GROMACS.
+    the program you create the system with, the default is GROMACS.
 
     *Support:* AMBER/CHARMM/GROMACS
 
@@ -119,10 +119,10 @@ Haodong Liu |   <haodonliu@foxmail.com>
 **it under the terms of the BSD 3-Clause License** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
 following conditions are met:
 
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+1. Redistributions of source code must retain the above copyright notice, this list of conditions, and the following
 disclaimer.
 
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the following
 disclaimer in the documentation and/or other materials provided with the distribution.
 
 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote
