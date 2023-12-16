@@ -38,7 +38,7 @@ python ./setup.py install
 - open the terminal and then use the code below to download via pip.
 
 ``` sh
-pip install tinkermodelling
+pip install tinkermodellor parmed numpy
 ```
 
 ## Testing
@@ -56,45 +56,40 @@ pytest test
 you can run the executed file locally with the following command in the terminal.
 
 ```sh
-    python tkm.py -l location_file -t topology_file -o 
-    outfile_name -k [True/False] -p [CHARMM/GROMACS/AMBER]
+    python tkm.py -loc loc_file -top top_file -out out_file [options]
 ```
 
 #### options
 
 - **-h** --help  
-
     show this help message and exit
 
-- **-l** LOCATION_FILE, **--location_file** LOCATION_FILE  
+- **-loc**  
+    location_file  
+    the path to the location_file of the system.  
+    *[Support: Amber(.inpcrd),CHARMM(.crd),GROMACS(.gro)]*
 
-    location_file , the path to the location_file of the system.  
+- **-top**  
+    topology_file  
+    the path to the location of the top file of the system.  
+    *[Support: Amber(.prmtop),CHARMM(.psf),GROMACS(.top)]*
 
-    *Support:* AMBER(.inpcrd),CHARMM(.crd),GROMACS(.gro)
+- **-out**  
+    out file path  
+    take current time as default,  
+    *[Default: "./sec_min_hour.xyz"]*  
+    *[Format: tinker(.xyz)]*
 
-- **-t** TOPOLOGY_FILE, **--topology_file** TOPOLOGY_FILE  
+- **--keep**  
+    *Parmed* will transfer the input file,  
+    it creates temporary files then removed,  
+    you can choose True to keep it.  
+    *[Default: False]*
 
-    topology_file, the path to the location of the top file of the system.  
-
-    *Support:* AMBER(.prmtop),CHARMM(.psf),GROMACS(.top)
-
-- **-o** OUTFILE, **--outfile** OUTFILE  
-
-    out file path, take current paths concat time as default, as './sec_min_hour.xyz'.
-
-    *Format:* TINKER(.xyz)
-
-- **-k** KEEP, **--keep** KEEP  
-
-    *Parmed* will read the input file and then transfer it, which will create two temporary files and will be removed automatically, you can choose whether to keep it.
-
-    *Support:* True/False
-
-- **-p** {AMBER,CHARMM,GROMACS}, **--program** {AMBER,CHARMM,GROMACS}
-
-    the program you create the system with, the default is GROMACS.
-
-    *Support:* AMBER/CHARMM/GROMACS
+- **--style {A,C,G}**  
+    the style you create the system with,  
+    *[Support:{A: Amber, C: CHARMM, G: GROMACS}]*  
+    *[default: G]*
 
 ### 2. Python API
 
@@ -134,7 +129,6 @@ see more information in the license file.
 ## Citation
 
 If you use this software in your research, you can cite the following paper:  
-
 **[need to be append]**
 
 ## Reference
