@@ -5,36 +5,38 @@ import parmed as pmd
 import time
 
 if __name__ == '__main__':
+    description = 'TinkerModellor contribute to import larger system into tinker'
+    usage = 'python tkm.py -loc loc_file -top top_file -out out_file [options]'
     
-    parser = argparse.ArgumentParser(description='command line for tinkermodellor', formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(description=description, usage=usage,formatter_class=argparse.RawTextHelpFormatter,)
     
-    parser.add_argument('-l','--location_file',
+    parser.add_argument('-loc',
                         type = str,
-                        help ='location_file , the path to the location_file of the system.Support: Amber(.inpcrd),CHARMM(.crd),GROMACS(.gro)',
+                        help ='location_file\nthe path to the location_file of the system.\n[Support: Amber(.inpcrd),CHARMM(.crd),GROMACS(.gro)]',
                         required = True)
     
-    parser.add_argument('-t','--topology_file', 
+    parser.add_argument('-top',
                         type = str,
-                        help = 'topology_file,the path to location top file of the system.Support: Amber(.prmtop),CHARMM(.psf),GROMACS(.top)', 
+                        help = 'topology_file\nthe path to location top file of the system.\n[Support: Amber(.prmtop),CHARMM(.psf),GROMACS(.top)]', 
                         required = True)
     
-    parser.add_argument('-o','--outfile', 
+    parser.add_argument('-out', 
                         type = str,
                         default= os.path.join(os.getcwd(),time.ctime().split(' ')[-2].replace(':','_')+'.xyz'),
-                        help = 'out file path , take current paths concat time as default , as "./sec_min_hour.xyz",Format: tinker(.xyz)', 
+                        help = 'outfile\ntake current time as default,\n[Default: "./sec_min_hour.xyz"]\n[Format: tinker(.xyz)]', 
                         )
     
-    parser.add_argument('-k','--keep', 
+    parser.add_argument('--keep', 
                         type = bool,
                         default = False,
-                        help = 'Parmed will read the input file and then trans it , which will create two temporary file and will be removed automaticly , you can chioce whether to keep it ', 
+                        help = 'keep\nParmed will transfer the input file,\nit creates temporary files then removed,\nyou can choose True to keep it\n[Default: False]', 
                         )
     
-    parser.add_argument('-p','--program', 
+    parser.add_argument('--style',
                         type = str,
-                        choices = ['AMBER','CHARMM','GROMACS'],
-                        default = 'GROMACS' ,
-                        help = 'the program you create the system with , default is GROMACS.', 
+                        choices = ['A','C','G'],
+                        default = 'G' ,
+                        help = 'style\nthe style you create the system with ,\n{A: Amber, C: CHARMM, G: GROMACS}\n[default: G]', 
                         )
     
     args = parser.parse_args()

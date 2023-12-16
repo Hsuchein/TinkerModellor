@@ -24,6 +24,7 @@ There are several ways to install TinkerModelling.
 
 ```sh
 python ./setup.py install
+pip install -r requirements.txt
 ```
 
 - open the terminal and then use the code below to clone this git and then use setup.py to install.
