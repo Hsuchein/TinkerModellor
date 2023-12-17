@@ -13,7 +13,7 @@ import re
 #(protein)                34                  O                           248                 GLU                O                 34           -0.5819            16                               ; qtot 0
 #                      <----------------------------------grp 1----------------------> <----- grp 2 -----> <--- grp 3 ---><-------------------------------- grp 4 ----------------------------------->
 #
-SYSTEM_ATOMTYPE_PATTERN = r"(\s*[0-9]+\s*[0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\*?\s*[0-9]+\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]+\s*-?[0-9]+\.[0-9]+\s*[0-9]+\.*[0-9]*\n?)(\s*;\s*[a-z]*\s*-?[0-9]*.[0-9]*\s*\n)?"
+SYSTEM_ATOMTYPE_PATTERN = r"(\s*[0-9]+\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\*?)(\s*[0-9]+\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]+\s*-?[0-9]+\.[0-9]+\s*[0-9]+\.*[0-9]*\n?)(\s*;\s*[a-z]*\s*-?[0-9]*.[0-9]*\s*\n)?"
 LIGAND_ATOMTYPE_PATTERN = r'(\s*[0-9]+\s*)([0-9a-z]*)(\s*[0-9]+)(\s*[a-zA-Z][0-9a-zA-Z]*)(\s*[0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?)(\s*[0-9]+\s*-?[0-9]+\.[0-9]+\s*[0-9]+\.*[0-9]*)(\s*;\s*[a-z]*\s*-?[0-9]*.[0-9]*\s*\n)?'
 
 #[ bonds ]
@@ -110,8 +110,18 @@ class TinkerModellor:
                         atomresidue_read.append(re.sub(r'\d', '', match_atomtype.group(2)).replace(' ', ''))
                         #DEBUG##print(line)
                     else:
-                        atomtype_read.append(match_atomtype.group(3)[:4].replace(' ', ''))
-                        atomresidue_read.append(re.sub(r'\d', '', match_atomtype.group(2)).replace(' ', ''))
+                        temp_atomtype = match_atomtype.group(5)[:4].replace(' ', '')
+                        temp_atomresidue = re.sub(r'\d', '', match_atomtype.group(4)).replace(' ', '')
+
+                        #In CYS, S in both of S-S or S-H is defined as SG in GMX top file, but in Tinker XYZ file, S in S-S is defined as SGS
+                        if temp_atomresidue == 'CYS' and temp_atomtype == 'S':
+                            atomtype_read.append('SGS')
+                        else:
+                            atomtype_read.append(temp_atomtype)
+                        
+                        #Residue name in GMX top file is not always the same as the residue name in Tinker XYZ file
+                        atomresidue_read.append(temp_atomresidue)
+                        
                         #DEBUG##print(line)
 
                 #DEBUG##print(atomresidue_read)

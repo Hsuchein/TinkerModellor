@@ -4,7 +4,7 @@ class GMXMolecule() :
     
     n_terminal_atomtype = ['N','NH']
     c_terminal_atomtype = ['C']
-    c_terminal_atomtype_for_oxygen = ['OXT','OC1','OC2']
+    c_terminal_atomtype_for_oxygen = ['OXT','OC1','OC2','O']
 
     #Used for store the residue name list
     residue_list =  [
@@ -144,7 +144,7 @@ class GMXMolecule() :
 
 
     def _check(self) -> None :
-        assert len(self.Bonds) == len(self.AtomTypes)+1, f'The length of Bonds({len(self.Bonds)}), AtomTypes({len(self.AtomTypes)}) and AtomCrds must be equal !'
+        assert len(self.Bonds) == len(self.AtomTypes)+1, f'The length of Bonds({len(self.Bonds)}), AtomTypes({len(self.AtomTypes)+1}) and AtomCrds must be equal !'
         self.AtomNums = len(self.AtomTypes)
 
 

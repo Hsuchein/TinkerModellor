@@ -7,6 +7,7 @@ class AmberForceFieldDict:
         'O':11,'OXT':234,'OC1':234,'OC2':234,'OTe':234,
     }
 
+    #In AMOEBABIO18, S in both of S-S and S-H is defined as SG. Hence, here we define SGS is S in S-S
     _amberpara={
         'GLY': {**_commonpara, **{"N":1,"CA":2,"C":3,"HN":4,"O":5,"HA":6,"HA1":6,"HA2":6,"HA3":6,'H':4}},
         'ALA': {**_commonpara, **{"N":7,"CA":8,"C":9,"HN":10,"O":11,"HA":12,"CB":13,"HB":14,"HB1":14,"HB2":14,"HB3":14,}},
@@ -15,7 +16,7 @@ class AmberForceFieldDict:
         'ILE': {**_commonpara, **{"CB":25,"HB":26,"HB2":26,"HB3":26,"CG1":27,"HG1":28,"HG11":28,"HG12":28,"HG12":28,"HG13":28,"HG21":30,"HG22":30,"HG23":30,"CG2":29,"HG2":30,"CD":31,'CD1':31,"HD":32,"HD1":32,"HD2":32,"HD3":32,"HD11":32,"HD12":32,"HD13":32,}},
         'SER': {**_commonpara, **{"CB":33,"HB":34,"HB1":34,"HB2":34,"HB3":34,"OG":35,"HG":36,'HB2':34,'HB3':34}},
         'THR': {**_commonpara, **{"CB":37,"HB":38,"HB2":38,"HB3":38,"OG1":39,"HG1":40,'HG21':42,'HG22':42,'HG23':42,"CG2":41,"HG2":42,}},
-        'CYS': {**_commonpara, **{"CB":43,"HB":44,"HB1":44,"HB2":44,"HB3":44,"HG":46,"SG":45,}},
+        'CYS': {**_commonpara, **{"CB":43,"HB":44,"HB1":44,"HB2":44,"HB3":44,"HG":46,"SG":45,'SGS':47}},
         'CYSA': {**_commonpara, **{"CA":48,"S-":49,}},
         'PRO': {**_commonpara, **{"N":50,"CA":51,"C":52,"O":53,"HA":54,"CB":55,"HB":56,"HB1":56,"HB2":56,"HB3":56,"CG":57,"HG":58,"HG1":58,"HG2":58,"HG3":58,"CD":59,"HD":60,"HD1":60,"HD2":60,"HD3":60,}},
         'PHE': {**_commonpara, **{"CB":61,"HB":62,"HB1":62,"HB2":62,"HB3":62,"CG":63,"CD":64,"CD1":64,"CD2":64,"HD":65,"HD1":65,"HD2":65,"HD3":65,"CE":66,"CE1":66,"CE2":66,"HE":67,"HE1":67,"HE2":67,"CZ":68,"HZ":69,}},
