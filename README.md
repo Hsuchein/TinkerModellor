@@ -1,4 +1,4 @@
-# TinkerModelling
+# TinkerModellor
 
 ## Description
 
