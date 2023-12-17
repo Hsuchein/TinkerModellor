@@ -2,7 +2,6 @@ from tinkermodellor.model_build._tkm import TinkerModellor
 import argparse
 import os
 import parmed as pmd
-import time
 
 if __name__ == '__main__':
     print('\n')
@@ -14,71 +13,90 @@ if __name__ == '__main__':
     
     parser.add_argument('-c',
                         type = str,
-                        help ='Coordination_file\nthe path to the coordination file of the system.\n[Support: Amber(.inpcrd/.crd),CHARMM(.crd),GROMACS(.gro)]',
+                        metavar = '',
+                        help ='Path to the coordination file.\nSupported formats: Amber(.inpcrd/.crd), CHARMM(.crd), GROMACS(.gro)',
                         required = True)
-    
+
     parser.add_argument('-p',
                         type = str,
-                        help = 'Topology_file\nthe path to the topology file of the system.\n[Support: Amber(.prmtop/.top),CHARMM(.psf),GROMACS(.top)]', 
+                        metavar = '',
+                        help = 'Path to the topology file.\nSupported formats: Amber(.prmtop/.top), CHARMM(.psf), GROMACS(.top)', 
                         required = True)
-    
+
     parser.add_argument('-o', 
                         type = str,
+                        metavar = '',
                         default= os.path.join(os.getcwd(),'/TinkerModellor.xyz'),
-                        help = 'Output_file\nthe path or name of output file,\n[Default: "./sec_min_hour.xyz"]\n[Format: tinker(.xyz)]', 
+                        help = 'Output file path or name.\nDefault: "./TinkerModellor.xyz"\nFormat: tinker(.xyz)', 
                         )
-    
+
     parser.add_argument('-k', 
-                        type = bool,
+                        type = str,
+                        metavar = '',
                         default = False,
-                        help = 'Keep\nParmed will transformate the input file into GROMACS format,\nit would create temporary files then removed,\nyou can set True to keep it\n[Default: False]', 
+                        help = 'Keep temporary files created during GROMACS format conversion.\nSet to True to keep.\nDefault: False', 
                         )
-    
+
     parser.add_argument('-f',
                         type = str,
+                        metavar = '',
                         choices = ['A','C','G'],
                         default = 'G' ,
-                        help = 'Format\nthe the format of input file system with ,\n{A: Amber, C: CHARMM, G: GROMACS}\n[default: G]', 
+                        help = 'Input file format.\nOptions: {A: Amber, C: CHARMM, G: GROMACS}\nDefault: G', 
                         )
-    
-''' 
+
+    parser.add_argument('-a',
+                        type = str,
+                        metavar = '',
+                        default = True ,
+                        help = 'Aggressive atomtype matching mode.\nMay result in atomtype mismatching but can match irregular atomtypes.\nDefault: True', 
+                        )
+
     top_file = '/home/wayne/quanmol/TinkerModellor/test/dataset/1BHZ/gromacs.top'
     gro_file = '/home/wayne/quanmol/TinkerModellor/test/dataset/1BHZ/gromacs.gro'
     out_file = '/home/wayne/quanmol/TinkerModellor/tinker.xyz'
     tkm= TinkerModellor()
     tkm(top_file=top_file,gro_file=gro_file)
     tkm.write_tkmsystem(xyz_path=out_file)
-
-
-
-'''  
+'''      
     args = parser.parse_args()
     top_file = args.Topology_file
     gro_file = args.Coordination_file
     out_file = args.Output_file
-    keep = args.Keep
     program = args.Format
     
+    keep = args.Keep
+    keep_flag = False
+    if isinstance (keep,str):
+        if keep.upper in ['TRUE','KEEP']:
+            keep_flag = True
+    
+    Aggressive =args.Aggressive
+    aggressive_flag = True
+    if isinstance (Aggressive,str):
+        if keep.upper == 'FALSE':
+            aggressive_flag = False
+
+    tkm= TinkerModellor(aggressive=aggressive_flag)
+
     if program == 'GROMACS' :
 
-        tkm= TinkerModellor()
         tkm(top_file=top_file,gro_file=gro_file)
         tkm.write_tkmsystem(xyz_path=out_file)
 
     if program == 'CHARMM' or program == 'AMBER' :
 
-        charmm = pmd.load_file(args.topology_file,args.location_file)
+        charmm = pmd.load_file(top_file,gro_file)
         charmm.save('./temp.gro')
         charmm.save('./temp.top')
-
-        tkm= TinkerModellor()
+      
         topology_file = './temp.top'
-        location_file = './temp.gro'
-        tkm(topology_file=top_file,gro_file=location_file)
+        coordination_file = './temp.gro'
+        tkm(top_file=topology_file,gro_file=coordination_file)
         tkm.write_tkmsystem(xyz_path=out_file)
 
-        if args.keep == False:
+        if keep_flag:
             os.remove('./temp.gro')
             os.remove('./temp.top')
- 
+'''  
 
