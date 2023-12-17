@@ -8,7 +8,11 @@ import pytest
 def pytest_configure():
     this_dir = pathlib.Path(__file__).parent
     pytest.EXAMPLE_PATH = str(this_dir.joinpath("dataset"))
-    pytest.OUTPUT_PATH = str(this_dir.joinpath("test_output"))
+    pytest.OUTPUT_PATH = this_dir.joinpath(".pytest/")
+    
+    #If .pytest not exist, then create a new .pytest folder.
+    pytest.OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
+    pytest.OUTPUT_PATH = str(pytest.OUTPUT_PATH)
     
 
 @pytest.fixture(scope='session')

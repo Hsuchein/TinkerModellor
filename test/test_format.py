@@ -1,5 +1,6 @@
 import pytest
 import re
+import os
 
 from tinkermodellor import TinkerModellor as tkm
 
@@ -17,7 +18,7 @@ def test_atom_align_dict(data, get_file_path):
     system(gro,top)
     
     # Write output to a file
-    output_file  = str(pytest.OUTPUT_PATH+"gromacs.xyz")
+    output_file  = os.path.join(pytest.OUTPUT_PATH, f"{data}.xyz")
     system.write_tkmsystem(output_file)
 
     # Read the file content
