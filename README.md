@@ -53,7 +53,7 @@ pytest test
 python tkm.py -c coordination_file -p topology_file -out output_file [options]
 ```
 
-#### TArguments
+#### Arguments
 -c: Path to the coordination file. Supported formats: Amber(.inpcrd/.crd), CHARMM(.crd), GROMACS(.gro). This argument is required.
 -p: Path to the topology file. Supported formats: Amber(.prmtop/.top), CHARMM(.psf), GROMACS(.top). This argument is required.
 -o: Output file path or name. Default is "./TinkerModellor.xyz". The format is tinker(.xyz).
@@ -61,7 +61,7 @@ python tkm.py -c coordination_file -p topology_file -out output_file [options]
 -f: Input file format. Options: {A: Amber, C: CHARMM, G: GROMACS}. Default is GROMACS.
 -a: Aggressive atomtype matching mode. May result in atomtype mismatching but can match irregular atomtypes. Default is True.
 
-#### TExample
+#### Example
 Here is an example of how to use the command:
 ``` python
 python tkm.py -c my_coordination_file.gro -p my_topology_file.top -o my_output_file.xyz -f G -a True
