@@ -32,8 +32,16 @@ MOLECULES_PATTERN = r"(Protein_chain_[A-Z]|[A-Za-z0-9]*-?\+?)(\s*[0-9]+\n)?"
 
 class TinkerModellor:
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self,aggressive:bool = True) -> None:
+        """
+        Used for buiding the Tinker XYZ system
+
+        Args:
+            aggressive(bool):   If true, scripts would try to pair more atom types,
+                                and this may results mismatching
+        """
+
+        self.aggressive = aggressive
 
     def __call__(self,gro_file:str ,top_file:str):
         self.build_tkmsystem(gro_file,top_file)
@@ -159,7 +167,7 @@ class TinkerModellor:
 
         self._read_gro_file(gro_path)
 
-        self.system = TinkerModellorSystem()
+        self.system = TinkerModellorSystem(aggressive= self.aggressive)
         #According to self.moleculetype to rebuild the Tinker XYZ format file
         #DEBUG##print(len(self.moleculetype_num))
         count = 0

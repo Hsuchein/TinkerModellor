@@ -2,9 +2,9 @@ class AmberForceFieldDict:
 
     _commonpara={
         'H':10,'H1':232,'H2':232,'H3':232,'HA':12,'HD1':24,'HD2':24,'HD3':24,
-        'CA':8,'CG1':17,'CG2':17,'C':9,
-        'N':7,
-        'O':11,'OXT':234,'OC1':234,'OC2':234,
+        'CA':8,'CG1':17,'CG2':17,'C':9,'CTe':233,
+        'N':7,'NTe':231,
+        'O':11,'OXT':234,'OC1':234,'OC2':234,'OTe':234,
     }
 
     _amberpara={

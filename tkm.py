@@ -5,6 +5,8 @@ import parmed as pmd
 import time
 
 if __name__ == '__main__':
+
+    print('\n')
     
     parser = argparse.ArgumentParser(description='command line for tinkermodellor', formatter_class=argparse.RawTextHelpFormatter)
     
