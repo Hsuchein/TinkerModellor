@@ -5,35 +5,30 @@
 text  
 **[needs to be written]**
 
-## Installation
+## Installing TinkerModelling
 
-### System Requirements
-
-- Python 3.9+
-
-### Methods  
-
-There are several ways to install TinkerModelling.
-
-- download the zip file from the repository and extract it. open the terminal and go to the folder where you extracted the zip file. then run the code below in the terminal.
-
-```sh
-python ./setup.py install
-pip install -r requirements.txt
-```
-
-- open the terminal and then use the code below to clone this git and then use setup.py to install.
-  
-```sh
-git clone https://github.com/Hsuchein/TinkerModellor.git
-cd TinkerModellor
-python ./setup.py install
-```
-
-- open the terminal and then use the code below to download via pip.
-
+Firstly, you can to download it through git or zip file
 ``` sh
-pip install tinkermodellor parmed numpy
+# in terminal
+git clone git@github.com:Hsuchein/TinkerModellor.git
+```
+Then go into the TinkerModellor folder, construct environment for TinkerModellor by conda
+``` sh
+cd TinkerModellor.
+conda env create -n TinkerModellor -f env.yml
+conda activate TinkerModellor
+```
+
+Additionally, TinkerModellor is based on ParmEd programme. Hence, you also need to install ParmEd
+``` sh
+git clone git@github.com:ParmEd/ParmEd.git
+cd ParmEd
+pip install .
+```
+Ultimately, install the TinkerModellor
+``` sh
+cd TinkerModellor
+pip install .
 ```
 
 ## Testing
