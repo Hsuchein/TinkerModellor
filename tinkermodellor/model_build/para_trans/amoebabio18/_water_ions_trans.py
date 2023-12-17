@@ -7,6 +7,8 @@ class WaterAndIonsForceField:
     water_para = {
     'OW':349,
     'HW':350,
+    'HW1':350,
+    'HW2':350,
     'OW_spc':349,
     'HW_spc':350,
     'H1':350,
@@ -26,4 +28,7 @@ class WaterAndIonsForceField:
     'Zn':102,
     'Na+':352,
     'Cl-':363,
+    'CL':363,
+    'NA':352,
+    'ZN':102,
     }

@@ -13,14 +13,14 @@ import re
 #(protein)                34                  O                           248                 GLU                O                 34           -0.5819            16                               ; qtot 0
 #                      <----------------------------------grp 1----------------------> <----- grp 2 -----> <--- grp 3 ---><-------------------------------- grp 4 ----------------------------------->
 #
-SYSTEM_ATOMTYPE_PATTERN = r"(\s*[0-9]+\s*[0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\*?\s*[0-9]+\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]+\s*-?[0-9]+\.[0-9]+\s*[0-9]+\.*[0-9]*)(\s*;\s*[a-z]*\s*-?[0-9]*.[0-9]*\s*\n)?"
+SYSTEM_ATOMTYPE_PATTERN = r"(\s*[0-9]+\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\*?)(\s*[0-9]+\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?\s*)([0-9]+\s*-?[0-9]+\.[0-9]+\s*[0-9]+\.*[0-9]*\n?)(\s*;\s*[a-z]*\s*-?[0-9]*.[0-9]*\s*\n)?"
 LIGAND_ATOMTYPE_PATTERN = r'(\s*[0-9]+\s*)([0-9a-z]*)(\s*[0-9]+)(\s*[a-zA-Z][0-9a-zA-Z]*)(\s*[0-9]?[a-zA-Z][0-9a-zA-Z]*-?\+?)(\s*[0-9]+\s*-?[0-9]+\.[0-9]+\s*[0-9]+\.*[0-9]*)(\s*;\s*[a-z]*\s*-?[0-9]*.[0-9]*\s*\n)?'
 
 #[ bonds ]
 #;                    ai          aj     funct         c0         c1         c2         c3
 #                     17          20     1            0.14650 272713.120000
 #                 <-- grp 1 --><grp 2 ><---------------grp 3--------------->
-BOND_PATTERN = r"\s*([0-9]+)\s*([0-9]*)(\s*1\s*[0-9].[0-9]*\s[0-9]*.[0-9]*\n)"
+BOND_PATTERN = r"\s*([0-9]+)\s*([0-9]+)(\s*1)(\s*[0-9].[0-9]*\s*[0-9]*.[0-9]*\n?)?(\s*[0-9].[0-9]*\s*[0-9]*.[0-9]*\n)?"
 
 #[ molecules ]
 #;                     Compound               mols
@@ -28,12 +28,20 @@ BOND_PATTERN = r"\s*([0-9]+)\s*([0-9]*)(\s*1\s*[0-9].[0-9]*\s[0-9]*.[0-9]*\n)"
 #                      Na+                    10
 #                      WAT                    9971
 #                 <-------- grp 1 ---------><grp 2 >
-MOLECULES_PATTERN = r"([A-Za-z0-9]*-?\+?\s*)([0-9]+\n)?"
+MOLECULES_PATTERN = r"(Protein_chain_[A-Z]|[A-Za-z0-9]*-?\+?)(\s*[0-9]+\n)?"
 
 class TinkerModellor:
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self,aggressive:bool = True) -> None:
+        """
+        Used for buiding the Tinker XYZ system
+
+        Args:
+            aggressive(bool):   If true, scripts would try to pair more atom types,
+                                and this may results mismatching
+        """
+
+        self.aggressive = aggressive
 
     def __call__(self,gro_file:str ,top_file:str):
         self.build_tkmsystem(gro_file,top_file)
@@ -58,11 +66,19 @@ class TinkerModellor:
         #Used for counting how many moleculetypes have been read
         molecule_type_count = 0 
 
+        #Used for counting which line is reading
+        line_count = 0
+
+        #Due to the similarity of [ bond ] and [ pairs ]
+        #We must use bond_flag to determine whether it is bond or pairs
+        bond_flag = False
+
         for line in lines:
             #A new molecule start (according to the GMX top file format)
             #GMX topology file format description: https://manual.gromacs.org/current/reference-manual/topologies/topology-file-formats.html
 
-            
+            line_count += 1
+
             if '[ moleculetype ]' in line:
                 #DEBUG##print("Detect a new moleculetype")
                 
@@ -83,6 +99,7 @@ class TinkerModellor:
 
             #Only when the molecule type is not empty, the program would read the information
             if molecule_type_count > 0 and molecules_flag == False:
+                
 
                 #To match the ATOMTYPE_PATTE
                 match_atomtype = re.fullmatch(SYSTEM_ATOMTYPE_PATTERN,line)
@@ -91,15 +108,38 @@ class TinkerModellor:
                     if ligand_atomtype:
                         atomtype_read.append(ligand_atomtype.group(2).replace(' ', ''))
                         atomresidue_read.append(re.sub(r'\d', '', match_atomtype.group(2)).replace(' ', ''))
+                        #DEBUG##print(line)
                     else:
-                        atomtype_read.append(match_atomtype.group(3)[:4].replace(' ', ''))
-                        atomresidue_read.append(re.sub(r'\d', '', match_atomtype.group(2)).replace(' ', ''))
+                        temp_atomtype = match_atomtype.group(5)[:4].replace(' ', '')
+                        temp_atomresidue = re.sub(r'\d', '', match_atomtype.group(4)).replace(' ', '')
+
+                        #In CYS, S in both of S-S or S-H is defined as SG in GMX top file, but in Tinker XYZ file, S in S-S is defined as SGS
+                        if temp_atomresidue == 'CYS' and temp_atomtype == 'S':
+                            atomtype_read.append('SGS')
+                        else:
+                            atomtype_read.append(temp_atomtype)
+                        
+                        #Residue name in GMX top file is not always the same as the residue name in Tinker XYZ file
+                        atomresidue_read.append(temp_atomresidue)
+                        
+                        #DEBUG##print(line)
+
+                #DEBUG##print(atomresidue_read)
+                #DEBUG##print(atomtype_read)
 
                 #To match the BOND_PATTERN
-                match_bond = re.fullmatch(BOND_PATTERN,line)
-                if match_bond:
+                if '[ bonds ]' in line:
+                    bond_flag = True
+                if not line.strip():
+                    bond_flag = False 
+
+                #match_bond = re.fullmatch(BOND_PATTERN,line)
+                if bond_flag and ';' not in line and '[ bonds ]' not in line:
                     #DEBUG##print(line)
-                    bond_read.append([int(match_bond.group(1)),int(match_bond.group(2))])
+                    #DEBUG##print(line_count)
+                    bond_line = line.strip().split()
+                    bond_read.append([int(bond_line[0]),int(bond_line[1])])
+                    #bond_read.append([int(match_bond.group(1)),int(match_bond.group(2))])
             
             
             if '[ molecules ]' in line:
@@ -133,11 +173,11 @@ class TinkerModellor:
     def build_tkmsystem(self,gro_path:str, top_path:str):
 
         self._read_top_file(top_path)
-        assert len(self.moleculetype)-1 == len(self.moleculetype_num), f'Number of Moleculetypes({len(self.moleculetype)}) in [ molecules ] Must Be Equal To Number({len(self.moleculetype_num)}) of [ moleculetype ]'
+        assert len(self.moleculetype)-1 == len(self.moleculetype_num), f'Number of Moleculetypes({len(self.moleculetype)-1}) in [ molecules ] Must Be Equal To Number({len(self.moleculetype_num)}) of [ moleculetype ]'
 
         self._read_gro_file(gro_path)
 
-        self.system = TinkerModellorSystem()
+        self.system = TinkerModellorSystem(aggressive= self.aggressive)
         #According to self.moleculetype to rebuild the Tinker XYZ format file
         #DEBUG##print(len(self.moleculetype_num))
         count = 0

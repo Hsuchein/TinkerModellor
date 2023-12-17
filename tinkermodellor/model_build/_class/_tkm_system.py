@@ -28,7 +28,7 @@ class TinkerModellorSystem() :
         
         #Used for store the atomtype transformation (into AMEOBABIO18 force field)
         if aggressive == True:
-            print('Aggressive mode is on, this may results atomtype mismatching')
+            print('\nAggressive mode is on, this may results atomtype mismatching')
         self.trans = AmberGAFFTrans(Aggressive=aggressive)
 
         #Set entire system's name

@@ -1,7 +1,18 @@
 from typing import  List, Union
 
 class GMXMolecule() :
+    
+    n_terminal_atomtype = ['N','NH']
+    c_terminal_atomtype = ['C']
+    c_terminal_atomtype_for_oxygen = ['OXT','OC1','OC2','O']
 
+    #Used for store the residue name list
+    residue_list =  [
+        "ALA", "ARG", "ASN", "ASP", "CYS",
+        "GLN", "GLU", "GLY", "HIE", "ILE",
+        "LEU", "LYS", "MET", "PHE", "PRO",
+        "SER", "THR", "TRP", "TYR", "VAL","HIS"]
+    
     def __init__(self) -> None :
         #Used for store the molecule information
 
@@ -35,6 +46,7 @@ class GMXMolecule() :
         self._get_moleculename(name)
         self._get_atomtypes_and_residues(atomtypes,atomeresiudes)
         self._get_bonds(bonds)
+        self._terminal_check()
         self._check()
 
     def _get_moleculename(self, name: str) -> None :
@@ -47,6 +59,7 @@ class GMXMolecule() :
         
         if isinstance(atomtypes,list):
             self.AtomTypes += atomtypes
+            #DEBUG##print(self.AtomTypes)
         else:
             raise TypeError('AtomTypes must be a string list')
         
@@ -63,7 +76,8 @@ class GMXMolecule() :
 
             #take value from bonds(list), and use the value as the index of list, then append the index of the value to the list
             for i in range(len(bonds)):
-                #print(bonds[i][0])
+                #DEBUG##print(bonds)
+                #print(i)
                 list[int(bonds[i][0])].append(int(bonds[i][1]))
                 list[int(bonds[i][1])].append(int(bonds[i][0]))
 
@@ -73,9 +87,64 @@ class GMXMolecule() :
         else:
             raise TypeError('Bonds must be a int or str list')
 
-        
+    def _terminal_check(self) -> None :
+
+        #Only when the molecule is protein, the terminal check is needed
+        if self.AtomResidue[0] != self.AtomResidue[-1] or len(self.AtomResidue) > 100:
+
+            #To determine whether it is a protein with normal residue name
+            if self.AtomResidue[0].strip() in GMXMolecule.residue_list:
+                n_terminal = self.AtomResidue[0]
+            else:
+                print("The first residue name is "+ self.AtomResidue[0])
+                print(f"{self.MoleculeName} is not a protein with normal residue name, TinkerModellor wont do residue terminal check! \n")
+                return 
+            
+            if self.AtomResidue[-1].strip() in GMXMolecule.residue_list:
+                c_terminal = self.AtomResidue[-1]
+            else:
+                print("The last residue name is "+ self.AtomResidue[-1])
+                print(f"{self.MoleculeName} is not a protein with normal residue name, TinkerModellor wont do residue terminal check!\n")
+                return
+            
+            print(f"{self.MoleculeName} is a protein with normal residue name, TinkerModellor will do residue terminal check!\n")
+
+            #N terminal check and atomtype replace
+            if n_terminal:
+                terminal_count = 0
+                first_n:bool = False
+                while not first_n :
+                    if self.AtomTypes[terminal_count] in GMXMolecule.n_terminal_atomtype:
+                        self.AtomTypes[terminal_count] = 'NTe'
+                        first_n = True
+                    terminal_count += 1
+            
+            if c_terminal:
+                terminal_count = -1
+                last_c:bool = False
+
+                #C terminal contains 1 Carbon atom and 2 Oxygen atoms
+                three_atom_count = 0
+                while not last_c :
+                    if self.AtomTypes[terminal_count] in GMXMolecule.c_terminal_atomtype:
+                        self.AtomTypes[terminal_count] = 'CTe'
+                        three_atom_count +=1
+                    if self.AtomTypes[terminal_count] in GMXMolecule.c_terminal_atomtype_for_oxygen:
+                        self.AtomTypes[terminal_count] = 'OTe'
+                        three_atom_count +=1
+                    if three_atom_count == 3:
+                        last_c =True
+
+                    terminal_count -= 1
+
+                
+
+
+
+
+
     def _check(self) -> None :
-        assert len(self.Bonds) == len(self.AtomTypes)+1, f'The length of Bonds({len(self.Bonds)}), AtomTypes({len(self.AtomTypes)}) and AtomCrds must be equal !'
+        assert len(self.Bonds) == len(self.AtomTypes)+1, f'The length of Bonds({len(self.Bonds)}), AtomTypes({len(self.AtomTypes)+1}) and AtomCrds must be equal !'
         self.AtomNums = len(self.AtomTypes)
 
 

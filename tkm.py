@@ -5,6 +5,8 @@ import parmed as pmd
 import time
 
 if __name__ == '__main__':
+    print('\n')
+
     description = 'TinkerModellor: A complicated biological system construction tool for Tinker Simulation Programme'
     usage = 'python tkm.py -c coordination_file -p topology_file -out output_file [options]'
     
@@ -39,6 +41,17 @@ if __name__ == '__main__':
                         help = 'Format\nthe the format of input file system with ,\n{A: Amber, C: CHARMM, G: GROMACS}\n[default: G]', 
                         )
     
+''' 
+    top_file = '/home/wayne/quanmol/TinkerModellor/test/dataset/1BHZ/gromacs.top'
+    gro_file = '/home/wayne/quanmol/TinkerModellor/test/dataset/1BHZ/gromacs.gro'
+    out_file = '/home/wayne/quanmol/TinkerModellor/tinker.xyz'
+    tkm= TinkerModellor()
+    tkm(top_file=top_file,gro_file=gro_file)
+    tkm.write_tkmsystem(xyz_path=out_file)
+
+
+
+'''  
     args = parser.parse_args()
     top_file = args.Topology_file
     gro_file = args.Coordination_file
@@ -67,3 +80,5 @@ if __name__ == '__main__':
         if args.keep == False:
             os.remove('./temp.gro')
             os.remove('./temp.top')
+ 
+
