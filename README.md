@@ -6,7 +6,7 @@
 
 TinkerModellor (TKM) serves as a versatile biological system construction tool designed to create intricate virtual biological systems for molecular dynamics within the Tinker Simulation Programme. Its primary function involves the generation of complex systems compatible with molecular simulation software. TKM possesses the capability to convert various specific formats, such as crd/top in Amber, gro/top in GROMACS, and psf/top in CHARMM, into the Tinker format (Tinker XYZ). Moreover, TKM offers a user-friendly and concise approach, functioning as an independent script for convenient usability. Additionally, it provides users with several distinct modules to construct personalized workflows, ensuring flexibility and ease of use. Essentially, TKM empowers users to model or simulate within one software and seamlessly transition to Tinker for analysis or further simulation, effectively harnessing separate functionalities concurrently.
 
-## Installing TinkerModelling
+## Installing TinkerModellor
 
 Firstly, you can to download it through git or zip file
 ``` sh
