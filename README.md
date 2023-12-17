@@ -11,7 +11,7 @@ Firstly, you can to download it through git or zip file
 # in terminal
 git clone git@github.com:Hsuchein/TinkerModellor.git
 ```
-.Then go into the TinkerModellor folder, construct environment for TinkerModellor by conda
+Then go into the TinkerModellor folder, construct environment for TinkerModellor by conda
 ``` sh
 cd TinkerModellor.
 conda env create -n TinkerModellor -f env.yml
@@ -30,19 +30,20 @@ cd TinkerModellor
 pip install .
 ```
 
-## Testing ParmEd
+## Testing TinkerModellor
 
-all the code based on python above 3.6
+all the code based on python above 3.9
 
 In order to automatically run the TinkerModelling tests, execute the following:
 
 ``` sh
 # in terminal
 ## Testing TinkerModelling
-pytest test
+cd test
+pytest . -v
 ```
 
-## how to use
+## Usage
 
 you can run the excute file locally with the following command in cmd
 
