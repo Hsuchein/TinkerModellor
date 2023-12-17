@@ -5,41 +5,43 @@ import parmed as pmd
 import time
 
 if __name__ == '__main__':
-
     print('\n')
+
+    description = 'TinkerModellor: A complicated biological system construction tool for Tinker Simulation Programme'
+    usage = 'python tkm.py -c coordination_file -p topology_file -out output_file [options]'
     
-    parser = argparse.ArgumentParser(description='command line for tinkermodellor', formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(description=description, usage=usage,formatter_class=argparse.RawTextHelpFormatter,)
     
-    parser.add_argument('-l','--location_file',
+    parser.add_argument('-c',
                         type = str,
-                        help ='location_file , the path to the location_file of the system.Support: Amber(.inpcrd),CHARMM(.crd),GROMACS(.gro)',
+                        help ='Coordination_file\nthe path to the coordination file of the system.\n[Support: Amber(.inpcrd/.crd),CHARMM(.crd),GROMACS(.gro)]',
                         required = True)
     
-    parser.add_argument('-t','--topology_file', 
+    parser.add_argument('-p',
                         type = str,
-                        help = 'topology_file,the path to location top file of the system.Support: Amber(.prmtop),CHARMM(.psf),GROMACS(.top)', 
+                        help = 'Topology_file\nthe path to the topology file of the system.\n[Support: Amber(.prmtop/.top),CHARMM(.psf),GROMACS(.top)]', 
                         required = True)
     
-    parser.add_argument('-o','--outfile', 
+    parser.add_argument('-o', 
                         type = str,
-                        default= os.path.join(os.getcwd(),time.ctime().split(' ')[-2].replace(':','_')+'.xyz'),
-                        help = 'out file path , take current paths concat time as default , as "./sec_min_hour.xyz",Format: tinker(.xyz)', 
+                        default= os.path.join(os.getcwd(),'/TinkerModellor.xyz'),
+                        help = 'Output_file\nthe path or name of output file,\n[Default: "./sec_min_hour.xyz"]\n[Format: tinker(.xyz)]', 
                         )
     
-    parser.add_argument('-k','--keep', 
+    parser.add_argument('-k', 
                         type = bool,
                         default = False,
-                        help = 'Parmed will read the input file and then trans it , which will create two temporary file and will be removed automaticly , you can chioce whether to keep it ', 
+                        help = 'Keep\nParmed will transformate the input file into GROMACS format,\nit would create temporary files then removed,\nyou can set True to keep it\n[Default: False]', 
                         )
     
-    parser.add_argument('-p','--program', 
+    parser.add_argument('-f',
                         type = str,
-                        choices = ['AMBER','CHARMM','GROMACS'],
-                        default = 'GROMACS' ,
-                        help = 'the program you create the system with , default is GROMACS.', 
+                        choices = ['A','C','G'],
+                        default = 'G' ,
+                        help = 'Format\nthe the format of input file system with ,\n{A: Amber, C: CHARMM, G: GROMACS}\n[default: G]', 
                         )
     
-
+''' 
     top_file = '/home/wayne/quanmol/TinkerModellor/test/dataset/1BHZ/gromacs.top'
     gro_file = '/home/wayne/quanmol/TinkerModellor/test/dataset/1BHZ/gromacs.gro'
     out_file = '/home/wayne/quanmol/TinkerModellor/tinker.xyz'
@@ -51,11 +53,11 @@ if __name__ == '__main__':
 
 '''  
     args = parser.parse_args()
-    top_file = args.topology_file
-    gro_file = args.location_file
-    out_file = args.outfile
-    keep = args.keep
-    program = args.program
+    top_file = args.Topology_file
+    gro_file = args.Coordination_file
+    out_file = args.Output_file
+    keep = args.Keep
+    program = args.Format
     
     if program == 'GROMACS' :
 
@@ -78,5 +80,5 @@ if __name__ == '__main__':
         if args.keep == False:
             os.remove('./temp.gro')
             os.remove('./temp.top')
-'''  
+ 
 

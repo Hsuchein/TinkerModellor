@@ -1,0 +1,5 @@
+mkl-service==2.4.0
+numpy 
+ParmEd==4.2.2
+setuptools==68.2.2
+wheel==0.41.2
