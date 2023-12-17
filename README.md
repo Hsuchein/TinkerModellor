@@ -1,20 +1,33 @@
 # TinkerModelling
 
-## Badges
-
-![(Build/Test Status)](Tests/badge.svg)
-
 ## Description
 
 text
 
 ## Installing TinkerModelling
 
-To install TinkerModelling, either clone this git repository or try to download with pip.
-
+Firstly, you can to download it through git or zip file
 ``` sh
-# in cmd
-pip install tinkermodelling
+# in terminal
+git clone git@github.com:Hsuchein/TinkerModellor.git
+```
+.Then go into the TinkerModellor folder, construct environment for TinkerModellor by conda
+``` sh
+cd TinkerModellor.
+conda env create -n TinkerModellor -f env.yml
+conda activate TinkerModellor
+```
+
+Additionally, TinkerModellor is based on ParmEd programme. Hence, you also need to install ParmEd
+``` sh
+git clone git@github.com:ParmEd/ParmEd.git
+cd ParmEd
+pip install .
+```
+Ultimately, install the TinkerModellor
+``` sh
+cd TinkerModellor
+pip install .
 ```
 
 ## Testing ParmEd
@@ -24,7 +37,7 @@ all the code based on python above 3.6
 In order to automatically run the TinkerModelling tests, execute the following:
 
 ``` sh
-# in cmd
+# in terminal
 ## Testing TinkerModelling
 pytest test
 ```
