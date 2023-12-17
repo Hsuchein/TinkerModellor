@@ -41,7 +41,8 @@ pip install tinkermodellor parmed numpy
 To automatically run the TinkerModelling tests, execute the following code in the terminal:
 
 ``` sh
-pytest test
+cd test
+pytest . -v
 ```
 
 ## Usage
