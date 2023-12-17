@@ -1,10 +1,5 @@
 # TinkerModelling
 
-## Badges
-
-![(Build/Test Status)](Tests/badge.svg)  
-**[need to be append after finishing pytest]**
-
 ## Description
 
 text  
@@ -14,7 +9,7 @@ text
 
 ### System Requirements
 
-- Python 3.6+
+- Python 3.9+
 
 ### Methods  
 
@@ -49,56 +44,37 @@ To automatically run the TinkerModelling tests, execute the following code in th
 pytest test
 ```
 
-## how to use
+## Usage
 
-### 1. Terminal
+### Command Line Usage
 
-you can run the executed file locally with the following command in the terminal.
-
-```sh
-    python tkm.py -loc loc_file -top top_file -out out_file [options]
+#### The general usage of the command is as follows:
+``` python
+python tkm.py -c coordination_file -p topology_file -out output_file [options]
 ```
 
-#### options
+#### TArguments
+-c: Path to the coordination file. Supported formats: Amber(.inpcrd/.crd), CHARMM(.crd), GROMACS(.gro). This argument is required.
+-p: Path to the topology file. Supported formats: Amber(.prmtop/.top), CHARMM(.psf), GROMACS(.top). This argument is required.
+-o: Output file path or name. Default is "./TinkerModellor.xyz". The format is tinker(.xyz).
+-k: Option to keep temporary files created during GROMACS format conversion. Set to True to keep. Default is False.
+-f: Input file format. Options: {A: Amber, C: CHARMM, G: GROMACS}. Default is GROMACS.
+-a: Aggressive atomtype matching mode. May result in atomtype mismatching but can match irregular atomtypes. Default is True.
 
-- **-h** --help  
-    show this help message and exit
+#### TExample
+Here is an example of how to use the command:
+``` python
+python tkm.py -c my_coordination_file.gro -p my_topology_file.top -o my_output_file.xyz -f G -a True
+```
+This command will run the TinkerModellor with a GROMACS coordination file my_coordination_file.gro and topology file my_topology_file.top, and it will output the result to my_output_file.xyz. The input file format is set to GROMACS, and the aggressive atomtype matching mode is enabled
 
-- **-loc**  
-    location_file  
-    the path to the location_file of the system.  
-    *[Support: Amber(.inpcrd),CHARMM(.crd),GROMACS(.gro)]*
-
-- **-top**  
-    topology_file  
-    the path to the location of the top file of the system.  
-    *[Support: Amber(.prmtop),CHARMM(.psf),GROMACS(.top)]*
-
-- **-out**  
-    out file path  
-    take current time as default,  
-    *[Default: "./sec_min_hour.xyz"]*  
-    *[Format: tinker(.xyz)]*
-
-- **--keep**  
-    *Parmed* will transfer the input file,  
-    it creates temporary files then removed,  
-    you can choose True to keep it.  
-    *[Default: False]*
-
-- **--style {A,C,G}**  
-    the style you create the system with,  
-    *[Support:{A: Amber, C: CHARMM, G: GROMACS}]*  
-    *[default: G]*
-
-### 2. Python API
-
-you can  use *TinkerModelling* as a lib too.
+### Packge Usage
 
 ``` python
+# in python
 import tinkermodellor as tkm
 new= tkm()
-new('gromacs.gro','gromacs.top')
+new('gromacs.gro',gromacs.top')
 new.write_tkmsystem('gromacs.xyz')
 ```
 
@@ -128,8 +104,8 @@ see more information in the license file.
 
 ## Citation
 
-If you use this software in your research, you can cite the following paper:  
-**[need to be append]**
+Please site the website if you use this software in your research:
+<https://github.com/Hsuchein/TinkerModellor>
 
 ## Reference
 
