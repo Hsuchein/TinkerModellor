@@ -51,12 +51,12 @@ python tkm.py -c coordination_file -p topology_file -out output_file [options]
 ```
 
 #### Arguments
--c: Path to the coordination file. Supported formats: Amber(.inpcrd/.crd), CHARMM(.crd), GROMACS(.gro). This argument is required.<br>
--p: Path to the topology file. Supported formats: Amber(.prmtop/.top), CHARMM(.psf), GROMACS(.top). This argument is required.<br>
--o: Output file path or name. Default is "./TinkerModellor.xyz". The format is tinker(.xyz).<br>
--k: Option to keep temporary files created during GROMACS format conversion. Set to True to keep. Default is False.<br>
--f: Input file format. Options: {A: Amber, C: CHARMM, G: GROMACS}. Default is GROMACS.<br>
--a: Aggressive atomtype matching mode. May result in atomtype mismatching but can match irregular atomtypes. Default is True.<br>
+**-c**: Path to the coordination file. Supported formats: Amber(.inpcrd/.crd), CHARMM(.crd), GROMACS(.gro). This argument is required.<br>
+**-p**: Path to the topology file. Supported formats: Amber(.prmtop/.top), CHARMM(.psf), GROMACS(.top). This argument is required.<br>
+**-o**: Output file path or name. Default is "./TinkerModellor.xyz". The format is tinker(.xyz).<br>
+**-k**: Option to keep temporary files created during GROMACS format conversion. Set to True to keep. Default is False.<br>
+**-f**: Input file format. Options: {A: Amber, C: CHARMM, G: GROMACS}. Default is GROMACS.<br>
+**-a**: Aggressive atomtype matching mode. May result in atomtype mismatching but can match irregular atomtypes. Default is True.<br>
 
 #### Example
 Here is an example of how to use the command:
