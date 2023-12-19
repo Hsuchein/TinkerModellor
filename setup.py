@@ -12,4 +12,6 @@ setup(
         include=['tinkermodellor', 'tinkermodellor.*', 'tinkermodellor.*.*']),
     include_package_data=True,
     version='0.1',
+    python_requires='>=3.6',
+    url='https://github.com/Hsuchein/TinkerModellor',
 )
