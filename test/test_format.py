@@ -1,15 +1,16 @@
 import pytest
 import re
+import os
 
 from tinkermodellor import TinkerModellor as tkm
 
 
-TINKER_XYZ = r'\s*[0-9]*\s*[a-zA-Z0-9]*\+?-?\s*[0-9]+.[0-9]+\s+[0-9]+.[0-9]+\s+[0-9]+.[0-9]+\s+[0-9A-Za-z]+\s*[0-9]*\s*[0-9]*\s*[0-9]*\s*[0-9]*\n'
+TINKER_XYZ = r'\s*[0-9]*\s*[a-zA-Z0-9]*\+?-?\s*\+?-?[0-9]+.[0-9]+\s+\+?-?[0-9]+.[0-9]+\s+\+?-?[0-9]+.[0-9]+\s+[0-9A-Za-z]+\s*[0-9]*\s*[0-9]*\s*[0-9]*\s*[0-9]*\n'
 
 system = tkm()
 
 @pytest.mark.parametrize('data', 
-    ['complex-gromacs'])
+    ['1ALB','1BHZ','134L'])
 def test_atom_align_dict(data, get_file_path):
     """Test that both __call__ and map methods return the expected atom map."""
     gro, top = get_file_path(data)
@@ -17,7 +18,7 @@ def test_atom_align_dict(data, get_file_path):
     system(gro,top)
     
     # Write output to a file
-    output_file  = str(pytest.OUTPUT_PATH+"gromacs.xyz")
+    output_file  = os.path.join(pytest.OUTPUT_PATH, f"{data}.xyz")
     system.write_tkmsystem(output_file)
 
     # Read the file content
